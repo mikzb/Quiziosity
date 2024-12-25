@@ -1,0 +1,6 @@
+Listado de rutas de carpetas para el volumen OS
+El número de serie del volumen es 8E00-B88C
+C:\F
+Ruta de acceso no válida: \F
+No existe ninguna subcarpeta 
+
