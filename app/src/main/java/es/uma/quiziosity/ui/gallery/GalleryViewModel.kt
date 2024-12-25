@@ -1,13 +1,13 @@
-package es.uma.quiziosity.ui.reflow
+package es.uma.quiziosity.ui.gallery
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class ReflowViewModel : ViewModel() {
+class GalleryViewModel : ViewModel() {
 
     private val _text = MutableLiveData<String>().apply {
-        value = "This is reflow Fragment"
+        value = "This is gallery Fragment"
     }
     val text: LiveData<String> = _text
 }
