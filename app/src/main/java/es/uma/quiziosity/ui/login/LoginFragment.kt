@@ -1,9 +1,5 @@
 package es.uma.quiziosity.ui.login
 
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.annotation.StringRes
-import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,13 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ProgressBar
 import android.widget.Toast
-import es.uma.quiziosity.databinding.FragmentLoginBinding
-
+import androidx.annotation.StringRes
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import es.uma.quiziosity.R
+import es.uma.quiziosity.databinding.FragmentLoginBinding
 
 class LoginFragment : Fragment() {
 
@@ -46,6 +43,7 @@ class LoginFragment : Fragment() {
         val usernameEditText = binding.username
         val passwordEditText = binding.password
         val loginButton = binding.login
+        val registerButton = binding.register
         val loadingProgressBar = binding.loading
 
         loginViewModel.loginFormState.observe(viewLifecycleOwner,
@@ -54,6 +52,7 @@ class LoginFragment : Fragment() {
                     return@Observer
                 }
                 loginButton.isEnabled = loginFormState.isDataValid
+                registerButton.isEnabled = loginFormState.isDataValid
                 loginFormState.usernameError?.let {
                     usernameEditText.error = getString(it)
                 }
@@ -85,7 +84,6 @@ class LoginFragment : Fragment() {
 
             override fun afterTextChanged(s: Editable) {
                 loginViewModel.loginDataChanged(
-                    usernameEditText.text.toString(),
                     passwordEditText.text.toString()
                 )
             }
@@ -109,13 +107,25 @@ class LoginFragment : Fragment() {
                 passwordEditText.text.toString()
             )
         }
+
+        registerButton.setOnClickListener {
+            loadingProgressBar.visibility = View.VISIBLE
+            loginViewModel.register(
+                usernameEditText.text.toString(),
+                passwordEditText.text.toString()
+            )
+        }
     }
 
     private fun updateUiWithUser(model: LoggedInUserView) {
-        val welcome = getString(R.string.welcome) + model.displayName
-        // TODO : initiate successful logged in experience
+        val welcome = getString(R.string.welcome) + " " + model.displayName
+
         val appContext = context?.applicationContext ?: return
         Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
+
+        // Redirect to HomeFragment
+        val navController = findNavController()
+        navController.navigate(R.id.nav_home)
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {

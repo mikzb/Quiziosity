@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        updateNavigationMenu(binding)
+
         binding.appBarMain.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null)
@@ -38,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_login, R.id.nav_logout
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -55,4 +57,25 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+}
+
+private fun updateNavigationMenu(binding: ActivityMainBinding) {
+
+    val navigationView = binding.navView
+    val menu = navigationView.menu
+    val loginItem = menu.findItem(R.id.nav_login)
+    val logoutItem = menu.findItem(R.id.nav_logout)
+
+    if (isUserLoggedIn()) {
+        loginItem.isVisible = false
+        logoutItem.isVisible = true
+    } else {
+        loginItem.isVisible = true
+        logoutItem.isVisible = false
+    }
+}
+
+private fun isUserLoggedIn(): Boolean {
+    // Implement your logic to check if the user is logged in
+
 }

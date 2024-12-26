@@ -12,14 +12,14 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="es.uma.quiziosity.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/nav_login"
+        android:name="es.uma.quiziosity.ui.login.LoginFragment"
+        android:label="@string/action_sign_in"
+        tools:layout="@layout/fragment_login" />
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="es.uma.quiziosity.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+<!--    <fragment-->
+<!--        android:id="@+id/nav_logout"-->
+<!--        android:name="es.uma.quiziosity.ui.logout.LogoutFragment"-->
+<!--        android:label="@string/action_logout"-->
+<!--        tools:layout="@layout/fragment_logout" />-->
 </navigation>

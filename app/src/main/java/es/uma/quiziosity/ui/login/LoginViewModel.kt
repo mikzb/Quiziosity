@@ -32,18 +32,25 @@ class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel()
         }
     }
 
-    fun loginDataChanged(username: String, password: String) {
-        if (!isUserNameValid(username)) {
-            _loginForm.value = LoginFormState(usernameError = R.string.invalid_username)
-        } else if (!isPasswordValid(password)) {
+    fun register(username: String, password: String) {
+        // Run the register function in a background thread (using coroutine)
+        viewModelScope.launch {
+            val result = loginRepository.register(username, password)
+
+            if (result is Result.Success) {
+                _loginResult.value = LoginResult(success = LoggedInUserView(displayName = result.data.displayName))
+            } else {
+                _loginResult.value = LoginResult(error = R.string.invalid_username)
+            }
+        }
+    }
+
+    fun loginDataChanged(password: String) {
+        if (!isPasswordValid(password)) {
             _loginForm.value = LoginFormState(passwordError = R.string.invalid_password)
         } else {
             _loginForm.value = LoginFormState(isDataValid = true)
         }
-    }
-
-    private fun isUserNameValid(username: String): Boolean {
-        return Patterns.EMAIL_ADDRESS.matcher(username).matches()
     }
 
     private fun isPasswordValid(password: String): Boolean {

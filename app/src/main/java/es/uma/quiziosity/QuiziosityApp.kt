@@ -11,6 +11,8 @@ class QuiziosityApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // Save the instance of the application
+        instance = this
         // Initialize the database here
         database = Room.databaseBuilder(
             applicationContext,

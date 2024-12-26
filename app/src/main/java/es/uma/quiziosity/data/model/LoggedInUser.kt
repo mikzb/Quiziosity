@@ -6,4 +6,12 @@ package es.uma.quiziosity.data.model
 data class LoggedInUser(
     val userId: String,
     val displayName: String
-)
+
+) {
+    companion object {
+        fun clear() {
+            // Clear user data
+            LoggedInUser("", "")
+        }
+    }
+}
