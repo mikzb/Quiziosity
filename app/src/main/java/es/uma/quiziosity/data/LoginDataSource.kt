@@ -18,7 +18,7 @@ class LoginDataSource {
             val user = userDao.getUserByUsername(username) ?: return Result.Error(Exception("User not found"))
 
             // Validate password
-            if (!SecurityUtils.verifyPassword(password, user.hashedPassword)) {
+            if (!SecurityUtils.verifyString(password, user.hashedPassword)) {
                 return Result.Error(Exception("Invalid credentials"))
             }
 
@@ -40,7 +40,7 @@ class LoginDataSource {
             }
 
             // Create user
-            val user = es.uma.quiziosity.data.entity.User(0, username, SecurityUtils.hashPassword(password))
+            val user = es.uma.quiziosity.data.entity.User(0, username, SecurityUtils.hashString(password))
 
             // Insert user into database
             val userId = userDao.insertUser(user)
@@ -50,10 +50,5 @@ class LoginDataSource {
         } catch (e: Exception) {
             Result.Error(e)
         }
-    }
-
-    fun logout() {
-        // Logged in user will be cleared from the repository
-        LoggedInUser.clear()
     }
 }

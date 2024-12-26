@@ -1,5 +1,6 @@
 package es.uma.quiziosity
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -17,6 +18,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var sharedPreferences: SharedPreferences
+    private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == "user_id" || key == "username") {
+            updateNavigationMenu(binding)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +32,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
+
+        sharedPreferences = QuiziosityApp.getSharedPreferences()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
 
         updateNavigationMenu(binding)
 
@@ -36,19 +46,38 @@ class MainActivity : AppCompatActivity() {
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_login, R.id.nav_logout
+                R.id.nav_home, R.id.nav_login, R.id.nav_logout
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_logout -> {
+                    logout()
+                    true
+                }
+                else -> {
+                    menuItem.isChecked = true
+                    drawerLayout.closeDrawers()
+                    navController.navigate(menuItem.itemId)
+                    true
+                }
+            }
+        }
+    }
+
+    private fun logout() {
+        val editor = sharedPreferences.edit()
+        editor.remove("user_id")
+        editor.remove("username")
+        editor.apply()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -57,10 +86,14 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+    }
 }
 
 private fun updateNavigationMenu(binding: ActivityMainBinding) {
-
     val navigationView = binding.navView
     val menu = navigationView.menu
     val loginItem = menu.findItem(R.id.nav_login)
@@ -76,6 +109,8 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
 }
 
 private fun isUserLoggedIn(): Boolean {
-    // Implement your logic to check if the user is logged in
-
+    val sharedPreferences = QuiziosityApp.getSharedPreferences()
+    val userId = sharedPreferences.getString("user_id", null)
+    val username = sharedPreferences.getString("username", null)
+    return userId != null && username != null
 }

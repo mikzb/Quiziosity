@@ -4,15 +4,34 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import es.uma.quiziosity.data.db.AppDatabase
+import android.content.SharedPreferences
+import androidx.security.crypto.EncryptedSharedPreferences
+import androidx.security.crypto.MasterKey
 
 class QuiziosityApp : Application() {
     // Define the database property at the class level
     lateinit var database: AppDatabase
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate() {
         super.onCreate()
         // Save the instance of the application
         instance = this
+
+        // Initialize MasterKey
+        val masterKey = MasterKey.Builder(applicationContext)
+            .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+            .build()
+
+        // Initialize the shared preferences here
+        sharedPreferences = EncryptedSharedPreferences.create(
+            applicationContext,
+            "quiziosity_preferences",
+            masterKey,
+            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+        )
+
         // Initialize the database here
         database = Room.databaseBuilder(
             applicationContext,
@@ -27,6 +46,10 @@ class QuiziosityApp : Application() {
         private lateinit var instance: QuiziosityApp
 
         fun getContext(): Context = instance.applicationContext
+
+        fun getSharedPreferences(): SharedPreferences {
+            return instance.sharedPreferences
+        }
 
         // Access the database globally
         fun getDatabase(): AppDatabase {

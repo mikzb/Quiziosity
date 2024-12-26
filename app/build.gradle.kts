@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.kotlin.ksp)
 }
 
 android {
@@ -52,8 +52,11 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
-//    testImplementation(libs.junit)
-//    androidTestImplementation(libs.androidx.junit)
+// https://mvnrepository.com/artifact/androidx.security/security-crypto
+    implementation(libs.androidx.security.crypto)
+
+
+
     androidTestImplementation(libs.androidx.espresso.core)
 
     implementation(libs.androidx.room.runtime)

@@ -1,5 +1,6 @@
 package es.uma.quiziosity.data
 
+import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.data.model.LoggedInUser
 
 /**
@@ -13,18 +14,10 @@ class LoginRepository(val dataSource: LoginDataSource) {
     var user: LoggedInUser? = null
         private set
 
-    val isLoggedIn: Boolean
-        get() = user != null
-
     init {
         // If user credentials will be cached in local storage, it is recommended it be encrypted
         // @see https://developer.android.com/training/articles/keystore
         user = null
-    }
-
-    fun logout() {
-        user = null
-        dataSource.logout()
     }
 
     suspend fun login(username: String, password: String): Result<LoggedInUser> {
@@ -51,7 +44,15 @@ class LoginRepository(val dataSource: LoginDataSource) {
 
     private fun setLoggedInUser(loggedInUser: LoggedInUser) {
         this.user = loggedInUser
-        // If user credentials will be cached in local storage, it is recommended it be encrypted
-        // @see https://developer.android.com/training/articles/keystore
+
+        // Get the encrypted SharedPreferences instance
+        val sharedPreferences = QuiziosityApp.getSharedPreferences()
+
+        // Store the user credentials securely
+        with(sharedPreferences.edit()) {
+            putString("user_id", loggedInUser.userId)
+            putString("username", loggedInUser.displayName)
+            apply()
+        }
     }
 }

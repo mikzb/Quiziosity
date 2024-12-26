@@ -9,7 +9,7 @@ object SecurityUtils {
      * @param password the plain text password
      * @return the hashed password
      */
-    fun hashPassword(password: String): String {
+    fun hashString(password: String): String {
         return BCrypt.withDefaults().hashToString(12, password.toCharArray())
     }
 
@@ -19,7 +19,7 @@ object SecurityUtils {
      * @param hashedPassword the stored hashed password
      * @return true if the password matches, false otherwise
      */
-    fun verifyPassword(password: String, hashedPassword: String): Boolean {
+    fun verifyString(password: String, hashedPassword: String): Boolean {
         val result = BCrypt.verifyer().verify(password.toCharArray(), hashedPassword)
         return result.verified
     }
