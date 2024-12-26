@@ -13,4 +13,14 @@ interface UserDao {
 
     @Delete
     suspend fun deleteUser(user: User)
+
+    @Update
+    suspend fun updateUser(user: User)
+
+    @Query("SELECT * FROM users WHERE email = :email")
+    suspend fun getUserByEmail(email: String): User
+
+    // Ordered by score, where the highest score is first
+    @Query("SELECT * FROM users ORDER BY score DESC")
+    suspend fun getAllUsersOrderedByScore(): List<User>
 }
