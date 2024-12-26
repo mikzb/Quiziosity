@@ -1,11 +1,9 @@
-package es.uma.quiziosity.ui
+package es.uma.quiziosity.ui.leaderboard
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import es.uma.quiziosity.R
 
 import es.uma.quiziosity.ui.placeholder.PlaceholderContent.PlaceholderItem
 import es.uma.quiziosity.databinding.FragmentLeaderboardBinding

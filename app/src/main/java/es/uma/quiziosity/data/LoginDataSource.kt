@@ -3,8 +3,6 @@ package es.uma.quiziosity.data
 import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.data.model.LoggedInUser
 import es.uma.quiziosity.utils.SecurityUtils
-import java.io.IOException
-import es.uma.quiziosity.data.db.AppDatabase
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.
@@ -19,10 +17,8 @@ class LoginDataSource {
             // If user doesn't exist, return error
             val user = userDao.getUserByEmail(username) ?: return Result.Error(Exception("User not found"))
 
-
             // Validate password
-            val hashedPassword = SecurityUtils.hashPassword(password)
-            if (user.hashedPassword != hashedPassword) {
+            if (!SecurityUtils.verifyPassword(password, user.hashedPassword)) {
                 return Result.Error(Exception("Invalid credentials"))
             }
 

@@ -1,4 +1,4 @@
-package es.uma.quiziosity.ui
+package es.uma.quiziosity.ui.leaderboard
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
