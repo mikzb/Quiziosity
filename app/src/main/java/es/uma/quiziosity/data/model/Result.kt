@@ -1,4 +1,4 @@
-package es.uma.quiziosity.data
+package es.uma.quiziosity.data.model
 
 /**
  * A generic class that holds a value with its loading status.

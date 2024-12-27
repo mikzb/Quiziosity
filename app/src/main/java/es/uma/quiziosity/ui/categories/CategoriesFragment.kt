@@ -1,17 +1,18 @@
-package es.uma.quiziosity.ui.slideshow
+package es.uma.quiziosity.ui.categories
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import es.uma.quiziosity.databinding.FragmentSlideshowBinding
+import es.uma.quiziosity.databinding.FragmentCategoriesBinding
+import es.uma.quiziosity.ui.slideshow.SlideshowViewModel
 
-class SlideshowFragment : Fragment() {
 
-    private var _binding: FragmentSlideshowBinding? = null
+class CategoriesFragment : Fragment() {
+
+    private var _binding: FragmentCategoriesBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -25,13 +26,13 @@ class SlideshowFragment : Fragment() {
         val slideshowViewModel =
             ViewModelProvider(this)[SlideshowViewModel::class.java]
 
-        _binding = FragmentSlideshowBinding.inflate(inflater, container, false)
+        _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textSlideshow
+        /*val textView: TextView = binding.textCategories
         slideshowViewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
-        }
+        }*/
         return root
     }
 
@@ -39,4 +40,5 @@ class SlideshowFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 }

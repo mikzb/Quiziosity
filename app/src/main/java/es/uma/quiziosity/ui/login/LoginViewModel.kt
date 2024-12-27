@@ -5,8 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import es.uma.quiziosity.R
-import es.uma.quiziosity.data.LoginRepository
-import es.uma.quiziosity.data.Result
+import es.uma.quiziosity.data.repository.LoginRepository
+import es.uma.quiziosity.data.model.Result
 import kotlinx.coroutines.launch
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {

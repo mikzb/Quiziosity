@@ -2,8 +2,8 @@ package es.uma.quiziosity.ui.login
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import es.uma.quiziosity.data.LoginDataSource
-import es.uma.quiziosity.data.LoginRepository
+import es.uma.quiziosity.data.repository.LoginDataSource
+import es.uma.quiziosity.data.repository.LoginRepository
 
 /**
  * ViewModel provider factory to instantiate LoginViewModel.

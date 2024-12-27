@@ -1,6 +1,7 @@
-package es.uma.quiziosity.data
+package es.uma.quiziosity.data.repository
 
 import es.uma.quiziosity.QuiziosityApp
+import es.uma.quiziosity.data.model.Result
 import es.uma.quiziosity.data.model.LoggedInUser
 
 /**
