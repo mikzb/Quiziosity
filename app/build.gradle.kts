@@ -16,6 +16,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        android.buildFeatures.buildConfig = true
+        buildConfigField("String", "DEEPL_API_KEY", "\"${project.findProperty("DEEPL_API_KEY") ?: ""}\"")
     }
 
     buildTypes {
@@ -52,8 +55,19 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.recyclerview)
-// https://mvnrepository.com/artifact/androidx.security/security-crypto
+
+    // https://mvnrepository.com/artifact/androidx.security/security-crypto
     implementation(libs.androidx.security.crypto)
+
+    // https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit
+    implementation(libs.retrofit)
+
+    // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
+    implementation (libs.converter.gson)
+
+
+
+
 
 
 

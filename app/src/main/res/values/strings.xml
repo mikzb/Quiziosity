@@ -23,4 +23,7 @@
     <string name="login_failed">"Login failed"</string>
     <string name="label_solo" translatable="false">Solo</string>
     <string name="label_1v1" translatable="false">1v1</string>
+    <string name="menu_leaderboard">Leaderboard</string>
+    <string name="profile_image">Profile image</string>
+    <string name="score">Score</string>
 </resources>
