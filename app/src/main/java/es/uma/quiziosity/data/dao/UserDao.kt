@@ -20,7 +20,7 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
     suspend fun getUserByUsername(username: String): User?
 
-    // Ordered by score, where the highest score is first
-    @Query("SELECT * FROM users ORDER BY score DESC")
-    suspend fun getAllUsersOrderedByScore(): List<User>
+
+    @Query("SELECT * FROM users ORDER BY score DESC LIMIT :limit OFFSET :offset")
+    suspend fun getUsersByScorePaged(offset: Int, limit: Int): List<User>
 }

@@ -19,10 +19,13 @@ import kotlinx.coroutines.launch
 class LeaderboardFragment : Fragment() {
 
     private var columnCount = 1
+    private lateinit var adapter: MyItemRecyclerViewAdapter
+    private var isLoading = false
+    private var currentPage = 0
+    private val pageSize = 20
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
             columnCount = it.getInt(ARG_COLUMN_COUNT)
         }
@@ -35,28 +38,43 @@ class LeaderboardFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_leaderboard_list, container, false)
 
         // Set the adapter
-        lifecycleScope.launch {
-            val users = QuiziosityApp.getDatabase().userDao().getAllUsersOrderedByScore()
-            // Set the adapter after fetching the users
-            if (view is RecyclerView) {
-                with(view) {
-                    layoutManager = when {
-                        columnCount <= 1 -> LinearLayoutManager(context)
-                        else -> GridLayoutManager(context, columnCount)
-                    }
-                    adapter = MyItemRecyclerViewAdapter(users)
+        if (view is RecyclerView) {
+            with(view) {
+                layoutManager = when {
+                    columnCount <= 1 -> LinearLayoutManager(context)
+                    else -> GridLayoutManager(context, columnCount)
                 }
+                adapter = MyItemRecyclerViewAdapter(emptyList())
+                this@LeaderboardFragment.adapter = adapter as MyItemRecyclerViewAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        super.onScrolled(recyclerView, dx, dy)
+                        if (!recyclerView.canScrollVertically(1) && !isLoading) {
+                            loadMoreItems()
+                        }
+                    }
+                })
             }
         }
+
+        loadMoreItems()
+
         return view
     }
 
-    companion object {
+    private fun loadMoreItems() {
+        isLoading = true
+        lifecycleScope.launch {
+            val users = QuiziosityApp.getDatabase().userDao().getUsersByScorePaged(currentPage * pageSize, pageSize)
+            adapter.addItems(users)
+            currentPage++
+            isLoading = false
+        }
+    }
 
-        // TODO: Customize parameter argument names
+    companion object {
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             LeaderboardFragment().apply {
