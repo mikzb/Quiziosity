@@ -4,16 +4,13 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
+import es.uma.quiziosity.data.entity.User
 
-import es.uma.quiziosity.ui.placeholder.PlaceholderContent.PlaceholderItem
 import es.uma.quiziosity.databinding.FragmentLeaderboardBinding
 
-/**
- * [RecyclerView.Adapter] that can display a [PlaceholderItem].
- * TODO: Replace the implementation with code for your data type.
- */
+
 class MyItemRecyclerViewAdapter(
-    private val values: List<PlaceholderItem>
+    private val values: List<User>
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -30,8 +27,8 @@ class MyItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = values[position]
-        holder.idView.text = item.id
-        holder.contentView.text = item.content
+        holder.idView.text = item.username
+        item.score.toString().also { holder.contentView.text = it }
     }
 
     override fun getItemCount(): Int = values.size

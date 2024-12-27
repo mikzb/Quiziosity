@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.lifecycleScope
+import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.R
-import es.uma.quiziosity.ui.placeholder.PlaceholderContent
+import kotlinx.coroutines.launch
 
 /**
  * A fragment representing a list of Items.
@@ -33,13 +35,17 @@ class LeaderboardFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_leaderboard_list, container, false)
 
         // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
+        lifecycleScope.launch {
+            val users = QuiziosityApp.getDatabase().userDao().getAllUsersOrderedByScore()
+            // Set the adapter after fetching the users
+            if (view is RecyclerView) {
+                with(view) {
+                    layoutManager = when {
+                        columnCount <= 1 -> LinearLayoutManager(context)
+                        else -> GridLayoutManager(context, columnCount)
+                    }
+                    adapter = MyItemRecyclerViewAdapter(users)
                 }
-                adapter = MyItemRecyclerViewAdapter(PlaceholderContent.ITEMS)
             }
         }
         return view
