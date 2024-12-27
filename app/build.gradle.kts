@@ -65,6 +65,9 @@ dependencies {
     // https://mvnrepository.com/artifact/com.squareup.retrofit2/converter-gson
     implementation (libs.converter.gson)
 
+    // https://mvnrepository.com/artifact/com.deepl.api/deepl-java
+    implementation(libs.deepl.java)
+
 
 
 

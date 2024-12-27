@@ -2,6 +2,7 @@
 agp = "8.7.3"
 bcrypt = "0.10.2"
 comAmulyakhareTextdrawable = "1.0.1"
+deeplJava = "1.7.0"
 kotlin = "2.1.0"
 coreKtx = "1.10.1"
 #junit = "4.13.2"
@@ -35,6 +36,7 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 com-amulyakhare-textdrawable = { module = "com.amulyakhare:com.amulyakhare.textdrawable", version.ref = "comAmulyakhareTextdrawable" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
+deepl-java = { module = "com.deepl.api:deepl-java", version.ref = "deeplJava" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }

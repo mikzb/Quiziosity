@@ -1,8 +1,8 @@
 package es.uma.quiziosity.data.repository
 
+import com.deepl.api.Translator
 import es.uma.quiziosity.BuildConfig
 import es.uma.quiziosity.data.api.TriviaApiSingleton
-import es.uma.quiziosity.data.api.TranslationApiSingleton
 import es.uma.quiziosity.data.model.Question
 
 object TriviaRepository {
@@ -10,23 +10,34 @@ object TriviaRepository {
     private const val DEEPL_AUTH_KEY = BuildConfig.DEEPL_API_KEY
 
     // Get trivia questions and translate them
-    suspend fun getTranslatedTriviaQuestions(category: String = "any", targetLang: String): List<Question> {
+    suspend fun getTriviaQuestions(
+        category: String = "any",
+        targetLang: String? = null
+    ): List<Question> {
         // Fetch trivia questions
         val triviaQuestions = TriviaApiSingleton.getTriviaQuestions(category)
+
+        // If no target language is specified, return the original questions
+        if (targetLang == null || targetLang == "en") {
+            return triviaQuestions
+        }
 
         // Extract the questions (or any other parts of the question you want to translate)
         val questionsToTranslate = triviaQuestions.map { it.question }
 
-        // Translate the questions using DeepL API
-        val translatedQuestionsResponse = TranslationApiSingleton.translateText(
-            DEEPL_AUTH_KEY,
-            targetLang,
-            questionsToTranslate
-        )
+        // Define the translator
+        val translator = Translator(DEEPL_AUTH_KEY)
 
-        // Map the translated text back to the trivia questions
-        return triviaQuestions.zip(translatedQuestionsResponse.translations).map { (original, translation) ->
-            original.copy(question = translation.text)
+        // Define source language
+        val sourceLang = "en"
+
+        // Translate the questions using DeepL API
+        val translatedQuestionsResponse =
+            translator.translateText(questionsToTranslate, sourceLang, targetLang)
+
+        // Map the translated questions to the original questions
+        return triviaQuestions.mapIndexed { index, question ->
+            question.copy(question = translatedQuestionsResponse[index].text)
         }
     }
 }
