@@ -6,7 +6,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 object TriviaApiSingleton {
     private const val BASE_URL = "https://the-trivia-api.com/v2/"
 
-    val triviaApi: TriviaApi by lazy {
+    private val triviaApi: TriviaApi by lazy {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())

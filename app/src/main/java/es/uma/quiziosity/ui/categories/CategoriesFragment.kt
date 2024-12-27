@@ -23,7 +23,7 @@ class CategoriesFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val slideshowViewModel =
+        val categoriesViewModel =
             ViewModelProvider(this)[SlideshowViewModel::class.java]
 
         _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
