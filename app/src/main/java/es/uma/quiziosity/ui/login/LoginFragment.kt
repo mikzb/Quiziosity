@@ -1,5 +1,6 @@
 package es.uma.quiziosity.ui.login
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import es.uma.quiziosity.R
 import es.uma.quiziosity.databinding.FragmentLoginBinding
 
@@ -119,9 +121,8 @@ class LoginFragment : Fragment() {
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome) + " " + model.displayName
-
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, welcome, Toast.LENGTH_LONG).show()
+        
+        Snackbar.make(requireView(), welcome, Snackbar.LENGTH_LONG).show()
 
         // Redirect to HomeFragment
         val navController = findNavController()
@@ -129,8 +130,14 @@ class LoginFragment : Fragment() {
     }
 
     private fun showLoginFailed(@StringRes errorString: Int) {
-        val appContext = context?.applicationContext ?: return
-        Toast.makeText(appContext, errorString, Toast.LENGTH_LONG).show()
+        val appContext = context ?: return
+        AlertDialog.Builder(appContext)
+            .setTitle(R.string.login_failed)
+            .setMessage(errorString)
+            .setPositiveButton(android.R.string.ok) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 
     override fun onDestroyView() {

@@ -78,6 +78,8 @@ class MainActivity : BaseActivity() {
         editor.remove("user_id")
         editor.remove("username")
         editor.apply()
+
+        Snackbar.make(binding.root, R.string.message_logout, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
