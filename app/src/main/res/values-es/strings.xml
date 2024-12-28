@@ -49,5 +49,6 @@
     <string name="category_check_uncheck_all">Marcar/Desmarcar Todas</string>
     <string name="guest">Invitado</string>
     <string name="message_logout">Sesión cerrada correctamente</string>
+    <string name="best_score">Mejor Puntuación: %1$s</string>
 
 </resources>
