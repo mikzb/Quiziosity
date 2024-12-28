@@ -20,18 +20,19 @@
     <string name="profile_image">Imagen de perfil</string>
     <string name="score">Puntuación</string>
     <string name="menu_categories">Categorías</string>
+
     <string name="title_activity_settings">Ajustes</string>
-    <string name="messages_header">Ajustes de sonido</string>
-    <string name="sync_header">Activar efectos de sonido</string>
-    <string name="signature_title">Volumen</string>
-    <string name="reply_title">Ajustes de tema</string>
-    <string name="sync_title">Establecer modo oscuro</string>
-    <string name="attachment_title">Opciones de idioma</string>
-    <string name="attachment_summary_on">Idioma</string>
-    <string name="attachment_summary_off">Ajustes de cuenta</string>
+    <string name="sound_settings">Ajustes de sonido</string>
+    <string name="enable_sound_effects">Activar efectos de sonido</string>
+    <string name="volume">Volumen</string>
+    <string name="theme_settings">Ajustes de tema</string>
+    <string name="enable_dark_mode">Activar modo oscuro</string>
+    <string name="language_settings">Ajustes de idioma</string>
+    <string name="language">Idioma</string>
+    <string name="account_settings">Ajustes de cuenta</string>
     <string name="reset_score">Reestablecer puntuación</string>
-    <string name="reset_score_summary">Reestablece tu puntuación máxima en la clasificación</string>
+    <string name="reset_score_summary">Reestablece tu puntuación en la clasificación</string>
     <string name="delete_account">Borrar cuenta</string>
     <string name="delete_account_summary">Borra tu cuenta y todos sus datos asociados</string>
-    android.
+
 </resources>

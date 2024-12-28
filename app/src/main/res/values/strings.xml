@@ -39,7 +39,7 @@
     <string name="language">Language</string>
     <string name="account_settings">Account Settings</string>
     <string name="reset_score">Reset Score</string>
-    <string name="reset_score_summary">Reset your quiz score</string>
+    <string name="reset_score_summary">Reset your quiz score in the leaderboard</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_summary">Delete your account and all data</string>
 </resources>
