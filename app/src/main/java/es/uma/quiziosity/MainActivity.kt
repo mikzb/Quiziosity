@@ -1,9 +1,11 @@
 package es.uma.quiziosity
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -12,6 +14,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
+import es.uma.quiziosity.QuiziosityApp.Companion.getSharedPreferences
 import es.uma.quiziosity.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
@@ -90,12 +93,35 @@ class MainActivity : BaseActivity() {
     }
 }
 
+// Check if user is logged in
+private fun isUserLoggedIn(): Boolean {
+    val sharedPreferences = getSharedPreferences()
+    val userId = sharedPreferences.getString("user_id", null)
+    val username = sharedPreferences.getString("username", null)
+    return userId != null && username != null
+}
+
+
+// Update the navigation menu (including username in header)
 private fun updateNavigationMenu(binding: ActivityMainBinding) {
     val navigationView = binding.navView
     val menu = navigationView.menu
     val loginItem = menu.findItem(R.id.nav_login)
     val logoutItem = menu.findItem(R.id.nav_logout)
 
+    // Update the username in the header
+    val sharedPreferences = getSharedPreferences()
+    val username = sharedPreferences.getString("username", null)
+    val headerView = navigationView.getHeaderView(0)
+    val usernameTextView: TextView = headerView.findViewById(R.id.nav_header_username_textview)
+
+    if (username != null) {
+        usernameTextView.text = username
+    } else {
+        usernameTextView.text = "Guest"  // Default if no username is found
+    }
+
+    // Handle visibility of login/logout items
     if (isUserLoggedIn()) {
         loginItem.isVisible = false
         logoutItem.isVisible = true
@@ -103,11 +129,4 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
         loginItem.isVisible = true
         logoutItem.isVisible = false
     }
-}
-
-private fun isUserLoggedIn(): Boolean {
-    val sharedPreferences = QuiziosityApp.getSharedPreferences()
-    val userId = sharedPreferences.getString("user_id", null)
-    val username = sharedPreferences.getString("username", null)
-    return userId != null && username != null
 }
