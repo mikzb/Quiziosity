@@ -67,6 +67,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/com.deepl.api/deepl-java
     implementation(libs.deepl.java)
+    implementation(libs.androidx.preference)
 
 
 
