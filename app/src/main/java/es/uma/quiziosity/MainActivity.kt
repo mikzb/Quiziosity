@@ -5,23 +5,26 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import es.uma.quiziosity.QuiziosityApp.Companion.getSharedPreferences
 import es.uma.quiziosity.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key == "user_id" || key == "username") {
-            updateNavigationMenu()
+            updateNavigationMenu(binding)
         }
     }
 
@@ -33,10 +36,10 @@ class MainActivity : BaseActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        sharedPreferences = QuiziosityApp.getSharedPreferences()
+        sharedPreferences = getSharedPreferences()
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
 
-        updateNavigationMenu()
+        updateNavigationMenu(binding)
 
         binding.appBarMain.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -97,30 +100,42 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+}
 
-    private fun updateNavigationMenu() {
-        val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        val menu = navigationView.menu
-        val loginItem = menu.findItem(R.id.nav_login)
-        val logoutItem = menu.findItem(R.id.nav_logout)
+// Check if user is logged in
+private fun isUserLoggedIn(): Boolean {
+    val sharedPreferences = getSharedPreferences()
+    val userId = sharedPreferences.getString("user_id", null)
+    val username = sharedPreferences.getString("username", null)
+    return userId != null && username != null
+}
 
-        if (isUserLoggedIn()) {
-            loginItem.isVisible = false
-            logoutItem.isVisible = true
-        } else {
-            loginItem.isVisible = true
-            logoutItem.isVisible = false
-        }
+
+// Update the navigation menu (including username in header)
+private fun updateNavigationMenu(binding: ActivityMainBinding) {
+    val navigationView = binding.navView
+    val menu = navigationView.menu
+    val loginItem = menu.findItem(R.id.nav_login)
+    val logoutItem = menu.findItem(R.id.nav_logout)
+
+    // Update the username in the header
+    val sharedPreferences = getSharedPreferences()
+    val username = sharedPreferences.getString("username", null)
+    val headerView = navigationView.getHeaderView(0)
+    val usernameTextView: TextView = headerView.findViewById(R.id.nav_header_username_textview)
+
+    if (username != null) {
+        usernameTextView.text = username
+    } else {
+        usernameTextView.text = QuiziosityApp.getContext().getString(R.string.guest)  // Default if no username is found
     }
 
-    private fun isUserLoggedIn(): Boolean {
-        val userId = sharedPreferences.getString("user_id", null)
-        val username = sharedPreferences.getString("username", null)
-        return userId != null && username != null
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+    // Handle visibility of login/logout items
+    if (isUserLoggedIn()) {
+        loginItem.isVisible = false
+        logoutItem.isVisible = true
+    } else {
+        loginItem.isVisible = true
+        logoutItem.isVisible = false
     }
 }

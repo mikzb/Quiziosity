@@ -56,5 +56,6 @@
     <string name="category_any">Any</string>
     <string name="show_selected">Show Selected</string>
     <string name="category_check_uncheck_all">Check/Uncheck All</string>
+    <string name="guest">Guest</string>
 
 </resources>
