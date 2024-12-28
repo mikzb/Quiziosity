@@ -14,7 +14,8 @@
         android:id="@+id/fragment_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <ImageButton
             android:id="@+id/imageButton_solo"
@@ -40,7 +41,7 @@
             android:layout_marginBottom="64dp"
             android:contentDescription="@string/label_1v1"
             android:src="@mipmap/ic_home_multiplayer_foreground"
-            android:background="@drawable/button_background_with_ripple_raspberry" />            />
+            android:background="@drawable/button_background_with_ripple_raspberry" />
     </LinearLayout>
 
 </FrameLayout>
