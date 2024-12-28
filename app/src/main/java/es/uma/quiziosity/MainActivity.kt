@@ -1,6 +1,7 @@
 package es.uma.quiziosity
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -18,6 +19,11 @@ class MainActivity : BaseActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
+        if (key == "user_id" || key == "username") {
+            updateNavigationMenu()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +33,10 @@ class MainActivity : BaseActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        updateNavigationMenu(binding)
+        sharedPreferences = QuiziosityApp.getSharedPreferences()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
+
+        updateNavigationMenu()
 
         binding.appBarMain.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -88,26 +97,30 @@ class MainActivity : BaseActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-}
 
-private fun updateNavigationMenu(binding: ActivityMainBinding) {
-    val navigationView = binding.navView
-    val menu = navigationView.menu
-    val loginItem = menu.findItem(R.id.nav_login)
-    val logoutItem = menu.findItem(R.id.nav_logout)
+    private fun updateNavigationMenu() {
+        val navigationView = findViewById<NavigationView>(R.id.nav_view)
+        val menu = navigationView.menu
+        val loginItem = menu.findItem(R.id.nav_login)
+        val logoutItem = menu.findItem(R.id.nav_logout)
 
-    if (isUserLoggedIn()) {
-        loginItem.isVisible = false
-        logoutItem.isVisible = true
-    } else {
-        loginItem.isVisible = true
-        logoutItem.isVisible = false
+        if (isUserLoggedIn()) {
+            loginItem.isVisible = false
+            logoutItem.isVisible = true
+        } else {
+            loginItem.isVisible = true
+            logoutItem.isVisible = false
+        }
     }
-}
 
-private fun isUserLoggedIn(): Boolean {
-    val sharedPreferences = QuiziosityApp.getSharedPreferences()
-    val userId = sharedPreferences.getString("user_id", null)
-    val username = sharedPreferences.getString("username", null)
-    return userId != null && username != null
+    private fun isUserLoggedIn(): Boolean {
+        val userId = sharedPreferences.getString("user_id", null)
+        val username = sharedPreferences.getString("username", null)
+        return userId != null && username != null
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(preferenceChangeListener)
+    }
 }
