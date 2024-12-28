@@ -4,10 +4,14 @@ import com.deepl.api.Translator
 import es.uma.quiziosity.BuildConfig
 import es.uma.quiziosity.data.api.TriviaApiSingleton
 import es.uma.quiziosity.data.model.Question
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 
 object TriviaRepository {
 
     private const val DEEPL_AUTH_KEY = BuildConfig.DEEPL_API_KEY
+
 
     // Get trivia questions and translate them
     suspend fun getTriviaQuestions(
@@ -38,6 +42,16 @@ object TriviaRepository {
         // Map the translated questions to the original questions
         return triviaQuestions.mapIndexed { index, question ->
             question.copy(question = translatedQuestionsResponse[index].text)
+        }
+    }
+
+    suspend fun fetchCategories(): List<String>? {
+        return withContext(Dispatchers.IO) {
+            val response = TriviaApiSingleton.getCategories()
+            if (response.isSuccessful) {
+                (response.body() as? Map<String, Any>)?.keys?.toList()            } else {
+                null
+            }
         }
     }
 }

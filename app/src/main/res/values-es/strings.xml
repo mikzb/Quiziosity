@@ -18,5 +18,6 @@
     <string name="menu_gallery">Galería</string>
     <string name="menu_leaderboard">Clasificación</string>
     <string name="profile_image">Imagen de perfil</string>
-    <string name="score">Puntuación</string>android.
+    <string name="score">Puntuación</string>
+    <string name="menu_categories">Categorías</string>android.
 </resources>
