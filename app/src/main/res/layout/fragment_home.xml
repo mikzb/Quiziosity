@@ -23,8 +23,10 @@
             android:layout_marginTop="48dp"
             android:layout_marginEnd="48dp"
             android:layout_marginBottom="64dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="@string/label_solo"/>
+            android:contentDescription="@string/label_solo"
+            android:src="@mipmap/ic_home_singleplayer_foreground"
+            android:background="@color/ic_home_singleplayer_background"
+            />
 
         <ImageButton
             android:id="@+id/imageButton_multi"
@@ -34,8 +36,10 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="48dp"
             android:layout_marginBottom="64dp"
-            tools:src="@tools:sample/avatars"
-            android:contentDescription="@string/label_1v1"/>
+            android:contentDescription="@string/label_1v1"
+            android:src="@mipmap/ic_home_multiplayer_foreground"
+            android:background="@color/ic_home_multiplayer_background"
+            />
     </LinearLayout>
 
 </FrameLayout>
