@@ -55,6 +55,6 @@
     <string name="category_sport_leisure">Sport &amp; Leisure</string>
     <string name="category_any">Any</string>
     <string name="show_selected">Show Selected</string>
-    <string name="category_all">Check all</string>
+    <string name="category_check_uncheck_all">Check/Uncheck All</string>
 
 </resources>

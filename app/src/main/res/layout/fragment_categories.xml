@@ -9,7 +9,7 @@
         android:id="@+id/allButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/category_all" />
+        android:text="@string/category_check_uncheck_all" />
 
     <ListView
         android:id="@+id/categoriesListView"
@@ -18,10 +18,4 @@
         android:layout_weight="1"
         android:divider="@android:color/darker_gray"
         android:dividerHeight="1dp" />
-
-    <Button
-        android:id="@+id/showSelectedButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/show_selected" />
 </LinearLayout>

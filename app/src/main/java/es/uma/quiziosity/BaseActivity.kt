@@ -1,20 +1,27 @@
 package es.uma.quiziosity
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
-import java.util.Locale
+import es.uma.quiziosity.utils.LocaleHelper
 
 open class BaseActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     protected lateinit var sharedPreferences: SharedPreferences
 
+    override fun attachBaseContext(newBase: Context) {
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(newBase)
+        val language = sharedPreferences.getString("language", "en") ?: "en"
+        val context = LocaleHelper.setLocale(newBase, language)
+        super.attachBaseContext(context)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this)
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
         applySettings()
     }
@@ -27,10 +34,11 @@ open class BaseActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences?, key: String?) {
         if (key == "language") {
             recreate() // Restart the activity to apply the new language
-        } else {
-            applySettings()
         }
+        else {
+            applySettings()
     }
+}
 
     private fun applySettings() {
         // Apply dark theme
@@ -44,12 +52,5 @@ open class BaseActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
         audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)
 
-        // Apply language
-        val language = sharedPreferences.getString("language", "en")
-        val locale = Locale(language!!)
-        Locale.setDefault(locale)
-        val config = resources.configuration
-        config.setLocale(locale)
-        createConfigurationContext(config)
     }
 }

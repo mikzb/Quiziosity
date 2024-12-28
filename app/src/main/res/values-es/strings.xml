@@ -46,6 +46,6 @@
     <string name="category_sport_leisure">Deporte y Entretenimiento</string>
     <string name="category_any">Cualquiera</string>
     <string name="show_selected">Mostrar seleccionados</string>
-    <string name="category_all">Marcar todas</string>
+    <string name="category_check_uncheck_all">Marcar/Desmarcar Todas</string>
 
 </resources>

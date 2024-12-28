@@ -36,14 +36,9 @@ class CategoriesFragment : Fragment() {
         binding.categoriesListView.adapter = adapter
         binding.categoriesListView.choiceMode = android.widget.ListView.CHOICE_MODE_MULTIPLE
 
-        // Set a button click listener to show selected categories
-        binding.showSelectedButton.setOnClickListener {
-            showSelectedCategories()
-        }
-
-        // Set a button click listener to check all categories
+        // Set a button click listener to check/uncheck all categories
         binding.allButton.setOnClickListener {
-            checkAllCategories()
+            toggleCheckAllCategories()
         }
     }
 
@@ -61,23 +56,10 @@ class CategoriesFragment : Fragment() {
         }
     }
 
-    private fun showSelectedCategories() {
-        val selectedCategories = mutableListOf<String>()
+    private fun toggleCheckAllCategories() {
+        val allChecked = (0 until binding.categoriesListView.count).all { binding.categoriesListView.isItemChecked(it) }
         for (i in 0 until binding.categoriesListView.count) {
-            if (binding.categoriesListView.isItemChecked(i)) {
-                val categoryName = adapter.getItem(i)
-                val categoryValue = viewModel.categories.value?.get(resources.getIdentifier(categoryName, "string", requireContext().packageName))
-                if (categoryValue != null) {
-                    selectedCategories.add(categoryValue)
-                }
-            }
-        }
-        Toast.makeText(requireContext(), "Selected: ${selectedCategories.joinToString(", ")}", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun checkAllCategories() {
-        for (i in 0 until binding.categoriesListView.count) {
-            binding.categoriesListView.setItemChecked(i, true)
+            binding.categoriesListView.setItemChecked(i, !allChecked)
         }
     }
 
