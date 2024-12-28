@@ -1,35 +1,44 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
-
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
-
-        <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
-
+    <PreferenceCategory android:title="Sound Settings">
+        <SwitchPreferenceCompat
+            android:key="sound_effects"
+            android:title="Enable Sound Effects"
+            android:defaultValue="true" />
+        <SeekBarPreference
+            android:key="volume"
+            android:title="Volume"
+            android:defaultValue="50"
+            android:max="100" />
     </PreferenceCategory>
 
-    <PreferenceCategory app:title="@string/sync_header">
-
+    <PreferenceCategory android:title="Theme Settings">
         <SwitchPreferenceCompat
-            app:key="sync"
-            app:title="@string/sync_title" />
+            android:key="dark_mode"
+            android:title="Enable Dark Mode"
+            android:defaultValue="false" />
+    </PreferenceCategory>
 
-        <SwitchPreferenceCompat
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+    <PreferenceCategory android:title="Language Settings">
+        <ListPreference
+            android:key="language"
+            android:title="Language"
+            android:entries="@array/language_entries"
+            android:entryValues="@array/language_values"
+            android:defaultValue="en" />
+    </PreferenceCategory>
 
+    <PreferenceCategory android:title="Account Settings">
+        <Preference
+            android:key="reset_score"
+            android:title="Reset Score"
+            android:summary="Reset your quiz score"
+        />
+        <Preference
+            android:key="delete_account"
+            android:title="Delete Account"
+            android:summary="Delete your account and all data"
+        />
     </PreferenceCategory>
 
 </PreferenceScreen>

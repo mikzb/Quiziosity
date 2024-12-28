@@ -27,20 +27,19 @@
     <string name="profile_image">Profile image</string>
     <string name="score">Score</string>
     <string name="menu_categories">Categories</string>
-    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_settings">Settings</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
 
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="sound_settings">Sound Settings</string>
+    <string name="enable_sound_effects">Enable Sound Effects</string>
+    <string name="volume">Volume</string>
+    <string name="theme_settings">Theme Settings</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="language_settings">Language Settings</string>
+    <string name="language">Language</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="reset_score">Reset Score</string>
+    <string name="reset_score_summary">Reset your quiz score</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_summary">Delete your account and all data</string>
 </resources>
