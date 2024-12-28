@@ -42,4 +42,19 @@
     <string name="reset_score_summary">Reset your quiz score in the leaderboard</string>
     <string name="delete_account">Delete Account</string>
     <string name="delete_account_summary">Delete your account and all data</string>
+
+    <string name="category_arts_literature">Arts &amp; Literature</string>
+    <string name="category_film_tv">Film &amp; TV</string>
+    <string name="category_food_drink">Food &amp; Drink</string>
+    <string name="category_general_knowledge">General Knowledge</string>
+    <string name="category_geography">Geography</string>
+    <string name="category_history">History</string>
+    <string name="category_music">Music</string>
+    <string name="category_science">Science</string>
+    <string name="category_society_culture">Society &amp; Culture</string>
+    <string name="category_sport_leisure">Sport &amp; Leisure</string>
+    <string name="category_any">Any</string>
+    <string name="show_selected">Show Selected</string>
+    <string name="category_all">Check all</string>
+
 </resources>

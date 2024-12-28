@@ -34,5 +34,18 @@
     <string name="reset_score_summary">Reestablece tu puntuación en la clasificación</string>
     <string name="delete_account">Borrar cuenta</string>
     <string name="delete_account_summary">Borra tu cuenta y todos sus datos asociados</string>
+    <string name="category_arts_literature">Arte y Literatura</string>
+    <string name="category_film_tv">Cine y Televisión</string>
+    <string name="category_food_drink">Comida y Bebida</string>
+    <string name="category_general_knowledge">Conocimiento General</string>
+    <string name="category_geography">Geografía</string>
+    <string name="category_history">Historia</string>
+    <string name="category_music">Música</string>
+    <string name="category_science">Ciencia</string>
+    <string name="category_society_culture">Sociedad y Cultura</string>
+    <string name="category_sport_leisure">Deporte y Entretenimiento</string>
+    <string name="category_any">Cualquiera</string>
+    <string name="show_selected">Mostrar seleccionados</string>
+    <string name="category_all">Marcar todas</string>
 
 </resources>
