@@ -121,7 +121,7 @@ class LoginFragment : Fragment() {
 
     private fun updateUiWithUser(model: LoggedInUserView) {
         val welcome = getString(R.string.welcome) + " " + model.displayName
-        
+
         Snackbar.make(requireView(), welcome, Snackbar.LENGTH_LONG).show()
 
         // Redirect to HomeFragment

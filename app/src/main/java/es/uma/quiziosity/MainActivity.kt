@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -120,16 +121,21 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
     val loginItem = menu.findItem(R.id.nav_login)
     val logoutItem = menu.findItem(R.id.nav_logout)
 
-    // Update the username in the header
+    // Update the username and best score in the header
     val sharedPreferences = getSharedPreferences()
     val username = sharedPreferences.getString("username", null)
+    val bestScore = sharedPreferences.getInt("max_score", 0)
     val headerView = navigationView.getHeaderView(0)
     val usernameTextView: TextView = headerView.findViewById(R.id.nav_header_username_textview)
+    val bestScoreTextView: TextView = headerView.findViewById(R.id.nav_header_best_score_textview)
 
     if (username != null) {
         usernameTextView.text = username
+        bestScoreTextView.text = QuiziosityApp.getContext().getString(R.string.best_score, bestScore.toString())
+        bestScoreTextView.visibility = View.VISIBLE
     } else {
         usernameTextView.text = QuiziosityApp.getContext().getString(R.string.guest)  // Default if no username is found
+        bestScoreTextView.visibility = View.GONE
     }
 
     // Handle visibility of login/logout items

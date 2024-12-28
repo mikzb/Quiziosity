@@ -58,5 +58,9 @@
     <string name="category_check_uncheck_all">Check/Uncheck All</string>
     <string name="guest">Guest</string>
     <string name="message_logout">Logged out successfully</string>
+    <string name="title_activity_game" translatable="false">Trivia</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="best_score">Best Score: %1$s</string>
 
 </resources>
