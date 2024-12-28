@@ -26,4 +26,5 @@
     <string name="menu_leaderboard">Leaderboard</string>
     <string name="profile_image">Profile image</string>
     <string name="score">Score</string>
+    <string name="menu_categories">Categories</string>
 </resources>

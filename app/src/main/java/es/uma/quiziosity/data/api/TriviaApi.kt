@@ -1,6 +1,7 @@
 package es.uma.quiziosity.data.api
 
 import es.uma.quiziosity.data.model.Question
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -12,4 +13,7 @@ interface TriviaApi {
     suspend fun getTriviaQuestions(
         @Query("CategoriesQueryParam") category : String,
     ): List<Question>
+
+    @GET("categories")
+    suspend fun getCategories(): Response<Map<String, List<String>>>
 }
