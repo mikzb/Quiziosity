@@ -25,8 +25,9 @@
             android:layout_marginBottom="64dp"
             android:contentDescription="@string/label_solo"
             android:src="@mipmap/ic_home_singleplayer_foreground"
-            android:background="@color/ic_home_singleplayer_background"
+            android:background="@drawable/button_background_with_ripple_azure"
             />
+
 
         <ImageButton
             android:id="@+id/imageButton_multi"
@@ -38,8 +39,7 @@
             android:layout_marginBottom="64dp"
             android:contentDescription="@string/label_1v1"
             android:src="@mipmap/ic_home_multiplayer_foreground"
-            android:background="@color/ic_home_multiplayer_background"
-            />
+            android:background="@drawable/button_background_with_ripple_raspberry" />            />
     </LinearLayout>
 
 </FrameLayout>
