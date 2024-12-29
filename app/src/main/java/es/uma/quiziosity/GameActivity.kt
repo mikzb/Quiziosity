@@ -1,6 +1,11 @@
 package es.uma.quiziosity
 
 import android.animation.ObjectAnimator
+import android.app.AlertDialog
+import android.content.Intent
+import android.content.SharedPreferences
+import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
@@ -20,11 +25,17 @@ class GameActivity : BaseActivity() {
     private var isAnswerChecked: Boolean = false
     private lateinit var binding: ActivityGameBinding
     private val hideHandler = Handler(Looper.myLooper()!!)
+
     private lateinit var questions: List<Question>
     private lateinit var currentQuestion: Question
     private lateinit var countDownTimer: CountDownTimer
+
     private var consecutiveCorrectAnswers: Int = 0
     private var score: Int = 0
+
+    private lateinit var mediaPlayer: MediaPlayer
+    private lateinit var correctAnswerMediaPlayer: MediaPlayer
+    private lateinit var wrongAnswerMediaPlayer: MediaPlayer
 
     private val hidePart2Runnable = Runnable {
         binding.root.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
@@ -50,6 +61,21 @@ class GameActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Get normalized volume
+        val normalizedVolume = getNormalizedVolume()
+
+        // Initialize MediaPlayers
+        mediaPlayer = MediaPlayer.create(this, R.raw.tic_tac_sound).apply {
+            isLooping = true
+            setVolume(normalizedVolume, normalizedVolume)
+        }
+        correctAnswerMediaPlayer = MediaPlayer.create(this, R.raw.correct_answer_sound).apply {
+            setVolume(normalizedVolume, normalizedVolume)
+        }
+        wrongAnswerMediaPlayer = MediaPlayer.create(this, R.raw.wrong_answer_sound).apply {
+            setVolume(normalizedVolume, normalizedVolume)
+        }
 
         resetButtons()
 
@@ -97,6 +123,19 @@ class GameActivity : BaseActivity() {
             override fun onTick(millisUntilFinished: Long) {
                 binding.timerText.text = getString(R.string.time_remaining, (millisUntilFinished / 1000).toString())
                 binding.timerProgressBar.progress = (millisUntilFinished * 1000 / totalTime).toInt()
+
+                // Play and loop the countdown sound
+                if (!mediaPlayer.isPlaying) {
+                    try {
+                        mediaPlayer.reset() // Reset the MediaPlayer
+                        mediaPlayer.setDataSource(applicationContext, Uri.parse("android.resource://${packageName}/raw/tic_tac_sound"))
+                        mediaPlayer.prepare()
+                        mediaPlayer.isLooping = true
+                        mediaPlayer.start()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
             }
 
             override fun onFinish() {
@@ -104,11 +143,30 @@ class GameActivity : BaseActivity() {
                 binding.timerProgressBar.progress = 0
                 consecutiveCorrectAnswers = 0
 
+                try {
+                    wrongAnswerMediaPlayer.reset()
+                    wrongAnswerMediaPlayer.setDataSource(applicationContext, Uri.parse("android.resource://${packageName}/raw/wrong_answer_sound"))
+                    wrongAnswerMediaPlayer.prepare()
+                    wrongAnswerMediaPlayer.start()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+
+                triggerVisualEffect()
+
                 Handler(Looper.getMainLooper()).postDelayed({
                     showNextQuestion()
-                }, 1000)
+                }, 1500)
             }
         }.start()
+    }
+
+
+
+    private fun triggerVisualEffect() {
+        val animator = ObjectAnimator.ofFloat(binding.root, "alpha", 1f, 0f, 1f)
+        animator.duration = 500
+        animator.start()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -119,7 +177,22 @@ class GameActivity : BaseActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cancelTimer()
+
+        // Release MediaPlayers
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.stop()
+            mediaPlayer.release()
+        }
+        if (::correctAnswerMediaPlayer.isInitialized) {
+            correctAnswerMediaPlayer.stop()
+            correctAnswerMediaPlayer.release()
+        }
+        if (::wrongAnswerMediaPlayer.isInitialized) {
+            wrongAnswerMediaPlayer.stop()
+            wrongAnswerMediaPlayer.release()
+        }
     }
+
 
     private fun toggle() {
         if (isFullscreen) {
@@ -173,6 +246,10 @@ class GameActivity : BaseActivity() {
         if (isAnswerChecked) return
         isAnswerChecked = true
 
+        if (mediaPlayer.isPlaying) {
+            mediaPlayer.stop()
+        }
+
         val buttons = listOf(binding.answer1, binding.answer2, binding.answer3, binding.answer4)
 
         buttons.forEach { button ->
@@ -180,6 +257,15 @@ class GameActivity : BaseActivity() {
             if (answer == correctAnswer) {
                 button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_green_light))
                 if (selectedAnswer == correctAnswer) {
+                    try {
+                        correctAnswerMediaPlayer.reset()
+                        correctAnswerMediaPlayer.setDataSource(applicationContext, Uri.parse("android.resource://${packageName}/raw/correct_answer_sound"))
+                        correctAnswerMediaPlayer.prepare()
+                        correctAnswerMediaPlayer.start()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
                     consecutiveCorrectAnswers++
                     val timeLeft = binding.timerProgressBar.progress
                     score += 10 + (timeLeft / 10)
@@ -187,20 +273,33 @@ class GameActivity : BaseActivity() {
                 }
             } else {
                 button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_red_light))
-                consecutiveCorrectAnswers = 0
+                if (selectedAnswer == answer) {
+                    try {
+                        wrongAnswerMediaPlayer.reset()
+                        wrongAnswerMediaPlayer.setDataSource(applicationContext, Uri.parse("android.resource://${packageName}/raw/wrong_answer_sound"))
+                        wrongAnswerMediaPlayer.prepare()
+                        wrongAnswerMediaPlayer.start()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                    consecutiveCorrectAnswers = 0
+                }
             }
             button.isClickable = false
         }
 
         Handler(Looper.getMainLooper()).postDelayed({
             showNextQuestion()
-        }, 1000)
+        }, 1500)
     }
+
+
 
     private fun resetButtons() {
         val buttons = listOf(binding.answer1, binding.answer2, binding.answer3, binding.answer4)
         buttons.forEach { button ->
             button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
+            button.setTextColor(ContextCompat.getColor(this, android.R.color.black))
             button.isClickable = true
         }
     }
@@ -230,6 +329,21 @@ class GameActivity : BaseActivity() {
         }
     }
 
+    private fun showEndGameDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Game Over")
+        builder.setMessage("Your score: $score")
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
+        builder.setCancelable(false)
+        builder.show()
+    }
+
     private fun endGame() {
         binding.answer1.visibility = View.GONE
         binding.answer2.visibility = View.GONE
@@ -237,5 +351,17 @@ class GameActivity : BaseActivity() {
         binding.answer4.visibility = View.GONE
         binding.timerText.visibility = View.GONE
         binding.timerProgressBar.visibility = View.GONE
+
+        QuiziosityApp.getSharedPreferences().getString("username", null)?.let { username ->
+            lifecycleScope.launch {
+                QuiziosityApp.getDatabase().userDao().updateScore(username, score)
+            }
+        }
+        showEndGameDialog()
+    }
+
+    private fun getNormalizedVolume(): Float {
+        val volume = sharedPreferences.getInt("volume", 50)
+        return volume / 100f // Convert volume to a float between 0.0 and 1.0
     }
 }

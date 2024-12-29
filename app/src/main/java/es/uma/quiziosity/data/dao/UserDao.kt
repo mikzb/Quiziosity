@@ -23,4 +23,14 @@ interface UserDao {
 
     @Query("SELECT * FROM users ORDER BY score DESC LIMIT :limit OFFSET :offset")
     suspend fun getUsersByScorePaged(offset: Int, limit: Int): List<User>
+
+    suspend fun updateScore(username: String, score: Int) {
+        val user = getUserByUsername(username)
+        if (user != null) {
+            if (score > user.score){
+                user.score = score
+                updateUser(user)
+            }
+        }
+    }
 }

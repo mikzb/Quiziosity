@@ -50,7 +50,14 @@ open class BaseActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         // Apply volume
         val volume = sharedPreferences.getInt("volume", 50)
         val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
-        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)
+
+        // If disabled, mute the volume
+        if (!sharedPreferences.getBoolean("sound_effects", false)) {
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
+        } else {
+            audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)
+        }
+
 
     }
 }
