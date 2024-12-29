@@ -1,8 +1,6 @@
 package es.uma.quiziosity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -11,8 +9,12 @@ import android.view.View
 import android.view.WindowInsets
 import android.widget.LinearLayout
 import android.widget.TextView
-import es.uma.quiziosity.data.api.TriviaApiSingleton
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import es.uma.quiziosity.data.model.Question
+import es.uma.quiziosity.data.repository.TriviaRepository
 import es.uma.quiziosity.databinding.ActivityGameBinding
+import kotlinx.coroutines.launch
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -21,7 +23,7 @@ import es.uma.quiziosity.databinding.ActivityGameBinding
 class GameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityGameBinding
-    private lateinit var fullscreenContent: TextView
+    private lateinit var fullscreenContent: LinearLayout
     private lateinit var fullscreenContentControls: LinearLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
 
@@ -60,25 +62,28 @@ class GameActivity : AppCompatActivity() {
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        isFullscreen = true
-
-        // Set up the user interaction to manually show or hide the system UI.
         fullscreenContent = binding.fullscreenContent
-        fullscreenContent.setOnClickListener { toggle() }
-
         fullscreenContentControls = binding.fullscreenContentControls
 
-        // Upon interacting with UI controls, delay any scheduled hide()
-        // operations to prevent the jarring behavior of controls going away
-        // while interacting with the UI.
-        binding.dummyButton.setOnTouchListener(delayHideTouchListener)
+        // Fetch questions in a coroutine
+        lifecycleScope.launch {
+            val questions = TriviaRepository.getTriviaQuestions()
+            if (questions.isNotEmpty()) {
+                val question = questions[0]
+                displayQuestion(question)
+            }
+        }
+    }
 
+    private fun displayQuestion(question: Question) {
+        binding.fullscreenContent.findViewById<TextView>(R.id.question_text).text = question.question.text
+        binding.fullscreenContent.findViewById<TextView>(R.id.correct_answer).text = question.correctAnswer
+        binding.fullscreenContent.findViewById<TextView>(R.id.incorrect_answer_1).text = question.incorrectAnswers[0]
+        binding.fullscreenContent.findViewById<TextView>(R.id.incorrect_answer_2).text = question.incorrectAnswers[1]
+        binding.fullscreenContent.findViewById<TextView>(R.id.incorrect_answer_3).text = question.incorrectAnswers[2]
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
