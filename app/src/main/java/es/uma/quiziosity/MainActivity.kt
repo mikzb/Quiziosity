@@ -112,14 +112,14 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
     // Update the username and best score in the header
     val sharedPreferences = getSharedPreferences()
     val username = sharedPreferences.getString("username", null)
-    val bestScore = sharedPreferences.getInt("max_score", 0)
+    val bestScore = sharedPreferences.getString("best_score", "0")
     val headerView = navigationView.getHeaderView(0)
     val usernameTextView: TextView = headerView.findViewById(R.id.nav_header_username_textview)
     val bestScoreTextView: TextView = headerView.findViewById(R.id.nav_header_best_score_textview)
 
     if (username != null) {
         usernameTextView.text = username
-        bestScoreTextView.text = QuiziosityApp.getContext().getString(R.string.best_score, bestScore.toString())
+        bestScoreTextView.text = QuiziosityApp.getContext().getString(R.string.best_score, bestScore)
         bestScoreTextView.visibility = View.VISIBLE
     } else {
         usernameTextView.text = QuiziosityApp.getContext().getString(R.string.guest)  // Default if no username is found

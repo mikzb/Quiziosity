@@ -5,6 +5,6 @@ package es.uma.quiziosity.data.model
  */
 data class LoggedInUser(
     val userId: String,
-    val displayName: String
-
+    val displayName: String,
+    val bestScore: Int = 0
 )

@@ -53,6 +53,7 @@ class LoginRepository(val dataSource: LoginDataSource) {
         with(sharedPreferences.edit()) {
             putString("user_id", loggedInUser.userId)
             putString("username", loggedInUser.displayName)
+            putString("best_score", loggedInUser.bestScore.toString())
             apply()
         }
     }

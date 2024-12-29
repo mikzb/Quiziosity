@@ -355,6 +355,7 @@ class GameActivity : BaseActivity() {
         QuiziosityApp.getSharedPreferences().getString("username", null)?.let { username ->
             lifecycleScope.launch {
                 QuiziosityApp.getDatabase().userDao().updateScore(username, score)
+                QuiziosityApp.getSharedPreferences().edit().putString("best_score", score.toString()).apply()
             }
         }
         showEndGameDialog()

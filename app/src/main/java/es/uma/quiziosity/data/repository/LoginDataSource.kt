@@ -24,7 +24,7 @@ class LoginDataSource {
             }
 
             // Login success
-            Result.Success(LoggedInUser(user.id.toString(), user.username))
+            Result.Success(LoggedInUser(user.id.toString(), user.username, user.score))
         } catch (e: Exception) {
             Result.Error(e)
         }
