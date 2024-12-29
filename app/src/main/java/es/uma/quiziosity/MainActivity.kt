@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -37,16 +38,19 @@ class MainActivity : BaseActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
+        // Add click listener for the settings button
+        val settingsButton: ImageButton = findViewById(R.id.btn_settings)
+        settingsButton.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
+            startActivity(intent)
+        }
+
+
         sharedPreferences = getSharedPreferences()
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
 
         updateNavigationMenu(binding)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
-        }
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -81,22 +85,6 @@ class MainActivity : BaseActivity() {
         editor.apply()
 
         Snackbar.make(binding.root, R.string.message_logout, Snackbar.LENGTH_SHORT).show()
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.action_settings -> {
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
