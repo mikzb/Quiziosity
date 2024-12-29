@@ -13,6 +13,14 @@
         </shape>
     </item>
     <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="126dp" />
+            <stroke
+                android:width="7dp"
+                android:color="@color/raspberry_rose" />
+        </shape>
+    </item>
+    <item>
         <ripple android:color="?attr/colorControlHighlight">
             <item android:id="@android:id/mask">
                 <color android:color="@android:color/white" />
