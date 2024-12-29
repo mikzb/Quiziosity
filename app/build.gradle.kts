@@ -70,6 +70,10 @@ dependencies {
     implementation(libs.androidx.preference)
     implementation(libs.androidx.preference.ktx)
 
+    // https://mvnrepository.com/artifact/androidx.constraintlayout/constraintlayout
+    runtimeOnly(libs.androidx.constraintlayout.v220)
+
+
 
 
 

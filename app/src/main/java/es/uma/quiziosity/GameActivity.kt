@@ -7,6 +7,8 @@ import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
+import android.widget.Button
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +26,7 @@ class GameActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityGameBinding
     private lateinit var fullscreenContent: LinearLayout
-    private lateinit var fullscreenContentControls: LinearLayout
+    private lateinit var fullscreenContentControls: FrameLayout
     private val hideHandler = Handler(Looper.myLooper()!!)
 
     @SuppressLint("InlinedApi")
@@ -79,11 +81,16 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun displayQuestion(question: Question) {
-        binding.fullscreenContent.findViewById<TextView>(R.id.question_text).text = question.question.text
-        binding.fullscreenContent.findViewById<TextView>(R.id.correct_answer).text = question.correctAnswer
-        binding.fullscreenContent.findViewById<TextView>(R.id.incorrect_answer_1).text = question.incorrectAnswers[0]
-        binding.fullscreenContent.findViewById<TextView>(R.id.incorrect_answer_2).text = question.incorrectAnswers[1]
-        binding.fullscreenContent.findViewById<TextView>(R.id.incorrect_answer_3).text = question.incorrectAnswers[2]
+        val answers = mutableListOf(question.correctAnswer).apply {
+            addAll(question.incorrectAnswers)
+            shuffle()
+        }
+
+        binding.questionText.text = question.question.text
+        binding.correctAnswer.text = answers[0]
+        binding.incorrectAnswer1.text = answers[1]
+        binding.incorrectAnswer2.text = answers[2]
+        binding.incorrectAnswer3.text = answers[3]
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
