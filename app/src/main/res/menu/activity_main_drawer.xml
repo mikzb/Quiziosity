@@ -20,10 +20,5 @@
             android:id="@+id/nav_leaderboard"
             android:icon="@drawable/ic_menu_leaderboard"
             android:title="@string/menu_leaderboard" />
-        <item
-            android:id="@+id/nav_categories"
-            android:icon="@drawable/ic_menu_categories"
-            android:title="@string/menu_categories" />
-
     </group>
 </menu>

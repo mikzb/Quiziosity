@@ -331,8 +331,8 @@ class GameActivity : BaseActivity() {
 
     private fun showEndGameDialog() {
         val builder = AlertDialog.Builder(this)
-        builder.setTitle("Game Over")
-        builder.setMessage("Your score: $score")
+        builder.setTitle(getString(R.string.game_over))
+        builder.setMessage(getString(R.string.your_score, score.toString()))
         builder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
             val intent = Intent(this, MainActivity::class.java)

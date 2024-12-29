@@ -59,8 +59,6 @@
     <string name="guest">Guest</string>
     <string name="message_logout">Logged out successfully</string>
     <string name="title_activity_game" translatable="false">Trivia</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="best_score">Best Score: %1$s</string>
     <string name="start_quiz">Start Quiz</string>
     <string name="no_category_selected">No Category Selected</string>
@@ -68,5 +66,7 @@
     <string name="proceed">Proceed</string>
     <string name="go_back">Go Back</string>
     <string name="time_remaining">Time remaining: %1$s</string>
+    <string name="your_score">Your score: %1$s</string>
+    <string name="game_over">Game Over</string>
 
 </resources>
