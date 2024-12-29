@@ -67,5 +67,6 @@
     <string name="NoCategorySelectedDialog">By not selecting a category, the questions will be a mix of every one of them. Do you want to proceed?</string>
     <string name="proceed">Proceed</string>
     <string name="go_back">Go Back</string>
+    <string name="time_remaining">Time remaining: %1$s</string>
 
 </resources>

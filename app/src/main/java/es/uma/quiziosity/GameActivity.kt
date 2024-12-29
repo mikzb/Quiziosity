@@ -1,33 +1,35 @@
 package es.uma.quiziosity
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowInsets
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import es.uma.quiziosity.data.model.Question
 import es.uma.quiziosity.data.repository.TriviaRepository
 import es.uma.quiziosity.databinding.ActivityGameBinding
-import es.uma.quiziosity.utils.LocaleHelper
 import kotlinx.coroutines.launch
 
 class GameActivity : BaseActivity() {
 
+    private var isAnswerChecked: Boolean = false
     private lateinit var binding: ActivityGameBinding
     private val hideHandler = Handler(Looper.myLooper()!!)
+    private lateinit var questions: List<Question>
+    private lateinit var currentQuestion: Question
+    private lateinit var countDownTimer: CountDownTimer
+    private var consecutiveCorrectAnswers: Int = 0
+    private var score: Int = 0
 
-    @SuppressLint("InlinedApi")
     private val hidePart2Runnable = Runnable {
-        // Delayed removal of status and navigation bar
         binding.root.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
     }
     private val showPart2Runnable = Runnable {
-        // Delayed display of UI elements
         supportActionBar?.show()
     }
     private var isFullscreen: Boolean = false
@@ -40,8 +42,6 @@ class GameActivity : BaseActivity() {
                 delayedHide(AUTO_HIDE_DELAY_MILLIS)
             }
             MotionEvent.ACTION_UP -> view.performClick()
-            else -> {
-            }
         }
         false
     }
@@ -51,33 +51,25 @@ class GameActivity : BaseActivity() {
         binding = ActivityGameBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Fetch questions in a coroutine
+        resetButtons()
+
         lifecycleScope.launch {
             val categories = sharedPreferences.getStringSet("categories", setOf())!!
             val language = sharedPreferences.getString("language", "en")!!
-            val questions = TriviaRepository.getTriviaQuestions(categories.toString(), language)
+            questions = TriviaRepository.getTriviaQuestions(categories.toString(), language)
             if (questions.isNotEmpty()) {
-                val question = questions[0]
-                displayQuestion(question)
+                currentQuestion = questions[0]
+                displayQuestion(currentQuestion)
             }
         }
 
-        // Apply animation to buttons
-        binding.answer1.setOnClickListener {
-            animateButton(it)
-            // Handle answer 1 click
-        }
-        binding.answer2.setOnClickListener {
-            animateButton(it)
-            // Handle answer 2 click
-        }
-        binding.answer3.setOnClickListener {
-            animateButton(it)
-            // Handle answer 3 click
-        }
-        binding.answer4.setOnClickListener {
-            animateButton(it)
-            // Handle answer 4 click
+        val answerButtons = listOf(binding.answer1, binding.answer2, binding.answer3, binding.answer4)
+        answerButtons.forEach { button ->
+            button.setOnClickListener {
+                animateButton(it)
+                checkAnswer(button.text.toString(), currentQuestion.correctAnswer)
+                countDownTimer.cancel()
+            }
         }
     }
 
@@ -92,11 +84,41 @@ class GameActivity : BaseActivity() {
         binding.answer2.text = answers[1]
         binding.answer3.text = answers[2]
         binding.answer4.text = answers[3]
+
+        resetProgressBar()
+        startTimer()
+    }
+
+    private fun startTimer(bonusTime: Long = 0L) {
+        cancelTimer()
+
+        val totalTime = 10000L + bonusTime
+        countDownTimer = object : CountDownTimer(totalTime, 10) {
+            override fun onTick(millisUntilFinished: Long) {
+                binding.timerText.text = getString(R.string.time_remaining, (millisUntilFinished / 1000).toString())
+                binding.timerProgressBar.progress = (millisUntilFinished * 1000 / totalTime).toInt()
+            }
+
+            override fun onFinish() {
+                checkAnswer("", currentQuestion.correctAnswer)
+                binding.timerProgressBar.progress = 0
+                consecutiveCorrectAnswers = 0
+
+                Handler(Looper.getMainLooper()).postDelayed({
+                    showNextQuestion()
+                }, 1000)
+            }
+        }.start()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         delayedHide(100)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        cancelTimer()
     }
 
     private fun toggle() {
@@ -133,11 +155,87 @@ class GameActivity : BaseActivity() {
     }
 
     private fun animateButton(button: View) {
-        val scaleX = ObjectAnimator.ofFloat(button, "scaleX", 1f, 1.2f, 1f)
-        val scaleY = ObjectAnimator.ofFloat(button, "scaleY", 1f, 1.2f, 1f)
-        scaleX.duration = 300
-        scaleY.duration = 300
-        scaleX.start()
-        scaleY.start()
+        button.animate()
+            .scaleX(1.2f)
+            .scaleY(1.2f)
+            .setDuration(150)
+            .withEndAction {
+                button.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(150)
+                    .start()
+            }
+            .start()
+    }
+
+    private fun checkAnswer(selectedAnswer: String, correctAnswer: String) {
+        if (isAnswerChecked) return
+        isAnswerChecked = true
+
+        val buttons = listOf(binding.answer1, binding.answer2, binding.answer3, binding.answer4)
+
+        buttons.forEach { button ->
+            val answer = button.text.toString()
+            if (answer == correctAnswer) {
+                button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_green_light))
+                if (selectedAnswer == correctAnswer) {
+                    consecutiveCorrectAnswers++
+                    val timeLeft = binding.timerProgressBar.progress
+                    score += 10 + (timeLeft / 10)
+                    startTimer(consecutiveCorrectAnswers * 2000L)
+                }
+            } else {
+                button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.holo_red_light))
+                consecutiveCorrectAnswers = 0
+            }
+            button.isClickable = false
+        }
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            showNextQuestion()
+        }, 1000)
+    }
+
+    private fun resetButtons() {
+        val buttons = listOf(binding.answer1, binding.answer2, binding.answer3, binding.answer4)
+        buttons.forEach { button ->
+            button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
+            button.isClickable = true
+        }
+    }
+
+    private fun showNextQuestion() {
+        resetButtons()
+        cancelTimer()
+
+        isAnswerChecked = false
+
+        val nextIndex = questions.indexOf(currentQuestion) + 1
+        if (nextIndex < questions.size) {
+            currentQuestion = questions[nextIndex]
+            displayQuestion(currentQuestion)
+        } else {
+            endGame()
+        }
+    }
+
+    private fun resetProgressBar() {
+        binding.timerProgressBar.progress = 1000
+    }
+
+    private fun cancelTimer() {
+        if (::countDownTimer.isInitialized) {
+            countDownTimer.cancel()
+        }
+    }
+
+    private fun endGame() {
+        binding.answer1.visibility = View.GONE
+        binding.answer2.visibility = View.GONE
+        binding.answer3.visibility = View.GONE
+        binding.answer4.visibility = View.GONE
+        binding.timerText.visibility = View.GONE
+        binding.timerProgressBar.visibility = View.GONE
     }
 }
