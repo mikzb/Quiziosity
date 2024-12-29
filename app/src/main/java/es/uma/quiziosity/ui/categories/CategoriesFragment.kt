@@ -1,5 +1,7 @@
 package es.uma.quiziosity.ui.categories
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +10,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import es.uma.quiziosity.GameActivity
+import es.uma.quiziosity.R
 import es.uma.quiziosity.databinding.FragmentCategoriesBinding
 
 class CategoriesFragment : Fragment() {
@@ -40,6 +44,11 @@ class CategoriesFragment : Fragment() {
         binding.allButton.setOnClickListener {
             toggleCheckAllCategories()
         }
+
+        // Set a button click listener to start the quiz
+        binding.startQuizButton.setOnClickListener {
+            startQuiz()
+        }
     }
 
     private fun observeViewModel() {
@@ -60,6 +69,31 @@ class CategoriesFragment : Fragment() {
         val allChecked = (0 until binding.categoriesListView.count).all { binding.categoriesListView.isItemChecked(it) }
         for (i in 0 until binding.categoriesListView.count) {
             binding.categoriesListView.setItemChecked(i, !allChecked)
+        }
+    }
+
+    private fun startQuiz() {
+        val selectedCategories = (0 until binding.categoriesListView.count)
+            .filter { binding.categoriesListView.isItemChecked(it) }
+
+        if (selectedCategories.isEmpty()) {
+            // Show a dialog if no category is selected
+            AlertDialog.Builder(requireContext())
+                .setTitle(getString(R.string.no_category_selected))
+                .setMessage(getString(R.string.NoCategorySelectedDialog))
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
+                    // Start the GameActivity
+                    val intent = Intent(requireContext(), GameActivity::class.java)
+                    startActivity(intent)
+                }
+                .setNegativeButton(getString(R.string.go_back)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        } else {
+            // Start the GameActivity
+            val intent = Intent(requireContext(), GameActivity::class.java)
+            startActivity(intent)
         }
     }
 

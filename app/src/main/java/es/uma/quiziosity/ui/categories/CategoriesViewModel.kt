@@ -24,8 +24,7 @@ class CategoriesViewModel : ViewModel() {
             R.string.category_music to "music",
             R.string.category_science to "science",
             R.string.category_society_culture to "society_and_culture",
-            R.string.category_sport_leisure to "sport_and_leisure",
-            R.string.category_any to "any"
+            R.string.category_sport_leisure to "sport_and_leisure"
         )
         _categories.value = predefinedCategories
     }
