@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import es.uma.quiziosity.GameActivity
+import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.R
 import es.uma.quiziosity.databinding.FragmentCategoriesBinding
 
@@ -75,6 +76,7 @@ class CategoriesFragment : Fragment() {
     private fun startQuiz() {
         val selectedCategories = (0 until binding.categoriesListView.count)
             .filter { binding.categoriesListView.isItemChecked(it) }
+            .map { adapter.getItem(it) }
 
         if (selectedCategories.isEmpty()) {
             // Show a dialog if no category is selected
@@ -91,6 +93,10 @@ class CategoriesFragment : Fragment() {
                 }
                 .show()
         } else {
+            // Save selected categories to SharedPreferences
+            val sharedPreferences = QuiziosityApp.getSharedPreferences()
+            sharedPreferences.edit().putStringSet("categories", selectedCategories.toSet()).apply()
+
             // Start the GameActivity
             val intent = Intent(requireContext(), GameActivity::class.java)
             startActivity(intent)

@@ -10,7 +10,7 @@ import kotlinx.coroutines.withContext
 
 object TriviaRepository {
 
-    private const val DEEPL_AUTH_KEY = BuildConfig.DEEPL_API_KEY
+    private const val DEEPL_AUTH_KEY = "0ab30cc3-b68f-4714-9a66-8c4cc127d50c:fx"
 
     // Get trivia questions and translate them
     suspend fun getTriviaQuestions(
