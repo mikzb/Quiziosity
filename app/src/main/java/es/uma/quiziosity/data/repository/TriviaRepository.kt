@@ -44,14 +44,4 @@ object TriviaRepository {
             question.copy(question = translatedQuestionsResponse[index].text)
         }
     }
-
-    suspend fun fetchCategories(): List<String>? {
-        return withContext(Dispatchers.IO) {
-            val response = TriviaApiSingleton.getCategories()
-            if (response.isSuccessful) {
-                (response.body() as? Map<String, Any>)?.keys?.toList()            } else {
-                null
-            }
-        }
-    }
 }

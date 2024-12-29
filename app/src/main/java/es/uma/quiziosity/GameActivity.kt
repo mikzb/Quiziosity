@@ -11,6 +11,7 @@ import android.view.View
 import android.view.WindowInsets
 import android.widget.LinearLayout
 import android.widget.TextView
+import es.uma.quiziosity.data.api.TriviaApiSingleton
 import es.uma.quiziosity.databinding.ActivityGameBinding
 
 /**
@@ -77,6 +78,7 @@ class GameActivity : AppCompatActivity() {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         binding.dummyButton.setOnTouchListener(delayHideTouchListener)
+
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
