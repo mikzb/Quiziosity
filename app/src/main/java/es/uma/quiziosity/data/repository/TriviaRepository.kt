@@ -1,5 +1,6 @@
 package es.uma.quiziosity.data.repository
 
+import com.deepl.api.DeepLException
 import com.deepl.api.Translator
 import es.uma.quiziosity.BuildConfig
 import es.uma.quiziosity.data.api.TriviaApiSingleton
@@ -7,27 +8,27 @@ import es.uma.quiziosity.data.model.Question
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
 object TriviaRepository {
 
     private const val DEEPL_AUTH_KEY = BuildConfig.DEEPL_API_KEY
 
-
     // Get trivia questions and translate them
     suspend fun getTriviaQuestions(
-        category: String = "any",
+        categories: String = "any",
         targetLang: String? = null
     ): List<Question> {
         // Fetch trivia questions
-        val triviaQuestions = TriviaApiSingleton.getTriviaQuestions(category)
+        val triviaQuestions = TriviaApiSingleton.getTriviaQuestions(categories)
 
         // If no target language is specified, return the original questions
         if (targetLang == null || targetLang == "en") {
             return triviaQuestions
         }
 
-        // Extract the questions (or any other parts of the question you want to translate)
-        val questionsToTranslate = triviaQuestions.map { it.question }
+        // Extract the texts to translate
+        val textsToTranslate = triviaQuestions.flatMap { question ->
+            listOf(question.question.text, question.correctAnswer) + question.incorrectAnswers
+        }
 
         // Define the translator
         val translator = Translator(DEEPL_AUTH_KEY)
@@ -35,23 +36,30 @@ object TriviaRepository {
         // Define source language
         val sourceLang = "en"
 
-        // Translate the questions using DeepL API
-        val translatedQuestionsResponse =
-            translator.translateText(questionsToTranslate, sourceLang, targetLang)
-
-        // Map the translated questions to the original questions
-        return triviaQuestions.mapIndexed { index, question ->
-            question.copy(question = translatedQuestionsResponse[index].text)
-        }
-    }
-
-    suspend fun fetchCategories(): List<String>? {
-        return withContext(Dispatchers.IO) {
-            val response = TriviaApiSingleton.getCategories()
-            if (response.isSuccessful) {
-                (response.body() as? Map<String, Any>)?.keys?.toList()            } else {
-                null
+        return try {
+            // Translate the texts using DeepL API
+            val translatedTextsResponse = withContext(Dispatchers.IO) {
+                translator.translateText(textsToTranslate, sourceLang, targetLang)
             }
+
+            // Map the translated texts back to the original questions
+            var index = 0
+            triviaQuestions.map { question ->
+                val translatedQuestionText = translatedTextsResponse[index++].text
+                val translatedCorrectAnswer = translatedTextsResponse[index++].text
+                val translatedIncorrectAnswers = question.incorrectAnswers.map { translatedTextsResponse[index++].text }
+
+                question.copy(
+                    question = question.question.copy(text = translatedQuestionText),
+                    correctAnswer = translatedCorrectAnswer,
+                    incorrectAnswers = translatedIncorrectAnswers
+                )
+            }
+        } catch (e: DeepLException) {
+            // Handle translation errors
+            e.printStackTrace()
+            // Return the original questions if translation fails
+            triviaQuestions
         }
     }
 }

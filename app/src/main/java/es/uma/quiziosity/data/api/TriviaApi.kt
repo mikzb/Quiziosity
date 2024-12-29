@@ -13,7 +13,4 @@ interface TriviaApi {
     suspend fun getTriviaQuestions(
         @Query("CategoriesQueryParam") category : String,
     ): List<Question>
-
-    @GET("categories")
-    suspend fun getCategories(): Response<Map<String, List<String>>>
 }

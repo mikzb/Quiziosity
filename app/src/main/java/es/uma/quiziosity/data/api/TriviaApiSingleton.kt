@@ -13,6 +13,5 @@ object TriviaApiSingleton {
             .build()
             .create(TriviaApi::class.java)
     }
-    suspend fun getTriviaQuestions(category: String = "any") = triviaApi.getTriviaQuestions(category)
-    suspend fun getCategories() = triviaApi.getCategories()
+    suspend fun getTriviaQuestions(categories: String = "any") = triviaApi.getTriviaQuestions(categories)
 }
