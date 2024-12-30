@@ -1,9 +1,9 @@
+// GameActivity.kt
 package es.uma.quiziosity
 
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.Intent
-import android.content.SharedPreferences
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -21,22 +21,28 @@ import es.uma.quiziosity.databinding.ActivityGameBinding
 import es.uma.quiziosity.utils.UserUtils
 import kotlinx.coroutines.launch
 
-class GameActivity : BaseActivity() {
+open class GameActivity : BaseActivity() {
 
-    private var isAnswerChecked: Boolean = false
-    private lateinit var binding: ActivityGameBinding
+    companion object {
+        private const val AUTO_HIDE = true
+        private const val AUTO_HIDE_DELAY_MILLIS = 3000
+        private const val UI_ANIMATION_DELAY = 300
+    }
+
+    protected var isAnswerChecked: Boolean = false
+    protected lateinit var binding: ActivityGameBinding
     private val hideHandler = Handler(Looper.myLooper()!!)
 
-    private lateinit var questions: List<Question>
-    private lateinit var currentQuestion: Question
+    protected lateinit var questions: List<Question>
+    protected lateinit var currentQuestion: Question
     private lateinit var countDownTimer: CountDownTimer
 
-    private var consecutiveCorrectAnswers: Int = 0
-    private var score: Int = 0
+    protected var consecutiveCorrectAnswers: Int = 0
+    protected var score: Int = 0
 
-    private lateinit var mediaPlayer: MediaPlayer
-    private lateinit var correctAnswerMediaPlayer: MediaPlayer
-    private lateinit var wrongAnswerMediaPlayer: MediaPlayer
+    protected lateinit var mediaPlayer: MediaPlayer
+    protected lateinit var correctAnswerMediaPlayer: MediaPlayer
+    protected lateinit var wrongAnswerMediaPlayer: MediaPlayer
 
     private val hidePart2Runnable = Runnable {
         binding.root.windowInsetsController?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
@@ -100,7 +106,7 @@ class GameActivity : BaseActivity() {
         }
     }
 
-    private fun displayQuestion(question: Question) {
+    protected fun displayQuestion(question: Question) {
         val answers = mutableListOf(question.correctAnswer).apply {
             addAll(question.incorrectAnswers)
             shuffle()
@@ -122,7 +128,7 @@ class GameActivity : BaseActivity() {
         startTimer()
     }
 
-    private fun startTimer(bonusTime: Long = 0L) {
+    protected fun startTimer(bonusTime: Long = 0L) {
         cancelTimer()
 
         val totalTime = 10000L + bonusTime
@@ -168,9 +174,7 @@ class GameActivity : BaseActivity() {
         }.start()
     }
 
-
-
-    private fun triggerVisualEffect() {
+    protected fun triggerVisualEffect() {
         val animator = ObjectAnimator.ofFloat(binding.root, "alpha", 1f, 0f, 1f)
         animator.duration = 500
         animator.start()
@@ -200,7 +204,6 @@ class GameActivity : BaseActivity() {
         }
     }
 
-
     private fun toggle() {
         if (isFullscreen) {
             hide()
@@ -228,13 +231,7 @@ class GameActivity : BaseActivity() {
         hideHandler.postDelayed(hideRunnable, delayMillis.toLong())
     }
 
-    companion object {
-        private const val AUTO_HIDE = true
-        private const val AUTO_HIDE_DELAY_MILLIS = 3000
-        private const val UI_ANIMATION_DELAY = 300
-    }
-
-    private fun animateButton(button: View) {
+    protected fun animateButton(button: View) {
         button.animate()
             .scaleX(1.2f)
             .scaleY(1.2f)
@@ -249,7 +246,7 @@ class GameActivity : BaseActivity() {
             .start()
     }
 
-    private fun checkAnswer(selectedAnswer: String, correctAnswer: String) {
+    protected open fun checkAnswer(selectedAnswer: String, correctAnswer: String) {
         if (isAnswerChecked) return
         isAnswerChecked = true
 
@@ -300,9 +297,7 @@ class GameActivity : BaseActivity() {
         }, 1500)
     }
 
-
-
-    private fun resetButtons() {
+    protected fun resetButtons() {
         val buttons = listOf(binding.answer1, binding.answer2, binding.answer3, binding.answer4)
         buttons.forEach { button ->
             button.setBackgroundColor(ContextCompat.getColor(this, android.R.color.white))
@@ -311,7 +306,7 @@ class GameActivity : BaseActivity() {
         }
     }
 
-    private fun showNextQuestion() {
+    protected open fun showNextQuestion() {
         resetButtons()
         cancelTimer()
 
@@ -326,32 +321,17 @@ class GameActivity : BaseActivity() {
         }
     }
 
-    private fun resetProgressBar() {
+    protected fun resetProgressBar() {
         binding.timerProgressBar.progress = 1000
     }
 
-    private fun cancelTimer() {
+    protected fun cancelTimer() {
         if (::countDownTimer.isInitialized) {
             countDownTimer.cancel()
         }
     }
 
-    private fun showEndGameDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.game_over))
-        builder.setMessage(getString(R.string.your_score, score.toString()))
-        builder.setPositiveButton("OK") { dialog, _ ->
-            dialog.dismiss()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
-        }
-        builder.setCancelable(false)
-        builder.show()
-    }
-
-    private fun endGame() {
+    protected open fun endGame() {
         binding.answer1.visibility = View.GONE
         binding.answer2.visibility = View.GONE
         binding.answer3.visibility = View.GONE
@@ -368,6 +348,21 @@ class GameActivity : BaseActivity() {
             }
         }
         showEndGameDialog()
+    }
+
+    private fun showEndGameDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(getString(R.string.game_over))
+        builder.setMessage(getString(R.string.your_score, score.toString()))
+        builder.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+            startActivity(intent)
+            finish()
+        }
+        builder.setCancelable(false)
+        builder.show()
     }
 
     private fun getNormalizedVolume(): Float {

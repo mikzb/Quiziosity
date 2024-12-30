@@ -15,7 +15,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Quiziosity">
         <activity
-            android:name=".GameActivity"
+            android:name=".SinglePlayerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:exported="false"
+            android:label="@string/title_activity_game"
+            android:theme="@style/Theme.Quiziosity.Fullscreen" />
+        <activity
+            android:name=".MultiPlayerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
             android:label="@string/title_activity_game"
