@@ -1,0 +1,30 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="128dp" />
+            <gradient
+                android:type="radial"
+                android:startColor="@color/azure"
+                android:endColor="?android:windowBackground"
+                android:gradientRadius="50%"
+                android:centerColor="@color/azure"
+                android:centerX="50%"
+                android:centerY="50%" />
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="126dp" />
+            <stroke
+                android:width="7dp"
+                android:color="@color/azure" />
+        </shape>
+    </item>
+    <item>
+        <ripple android:color="?attr/colorControlHighlight">
+            <item android:id="@android:id/mask">
+                <color android:color="@android:color/white" />
+            </item>
+        </ripple>
+    </item>
+</layer-list>
