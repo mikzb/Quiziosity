@@ -107,9 +107,13 @@ class MultiPlayerActivity : GameActivity() {
     }
 
     private fun showEndGameDialog() {
+        val sharedPreferences = QuiziosityApp.getSharedPreferences()
+        val playerName1 = sharedPreferences.getString("player_name_1", getString(R.string.guest))
+        val playerName2 = sharedPreferences.getString("player_name_2", getString(R.string.guest))
+
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.game_over))
-        builder.setMessage(getString(R.string.multiplayer_scores, player1Score.toString(), player2Score.toString()))
+        builder.setMessage(getString(R.string.multiplayer_scores, playerName1, player1Score.toString(), playerName2, player2Score.toString()))
         builder.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
             val intent = Intent(this, MainActivity::class.java)

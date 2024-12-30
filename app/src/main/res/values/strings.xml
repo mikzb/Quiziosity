@@ -68,10 +68,15 @@
     <string name="time_remaining">Time remaining: %1$s</string>
     <string name="your_score">Your score: %1$s</string>
     <string name="game_over">Game Over</string>
-    <string name="multiplayer_scores">Player 1 Score: %1$s\n\nPlayer 2 Score: %2$s</string>
     <string name="user_not_logged_in_title">You are not logged in</string>
     <string name="user_not_logged_in_message">You are not logged in. You can still play as a guest, your score won\'t be displayed on the leaderboard.</string>
     <string name="goto_login">LOGIN</string>
     <string name="play_as_guest">PLAY AS GUEST</string>
+    <string name="start_game">Start Game</string>
+    <string name="enter_names">Enter Names</string>
+    <string name="names_required">Both names are required</string>
+    <string name="enter_name_player1_hint">Enter Player 1 name</string>
+    <string name="enter_name_player2_hint">Enter Player 2 name</string>
+    <string name="multiplayer_scores">%1$s Score: %2$s\n\n%3$s Score: %4$s</string>
 
 </resources>

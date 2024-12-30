@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -31,11 +33,11 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.imageButtonSolo.setOnClickListener {
-            checkLoginStatusAndProceed(isMultiplayer = false)
+            checkLoginStatusAndProceed()
         }
 
         binding.imageButtonMulti.setOnClickListener {
-            checkLoginStatusAndProceed(isMultiplayer = true)
+            showNameInputDialog()
         }
 
         return root
@@ -46,17 +48,17 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun checkLoginStatusAndProceed(isMultiplayer: Boolean) {
+    private fun checkLoginStatusAndProceed() {
         val isLoggedIn = UserUtils.isUserLoggedIn()
 
         if (isLoggedIn) {
-            startGame(isMultiplayer)
+            startGame(false)
         } else {
-            showLoginConfirmationDialog(isMultiplayer)
+            showLoginConfirmationDialog()
         }
     }
 
-    private fun showLoginConfirmationDialog(isMultiplayer: Boolean) {
+    private fun showLoginConfirmationDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.user_not_logged_in_title)
             .setMessage(R.string.user_not_logged_in_message)
@@ -64,7 +66,7 @@ class HomeFragment : Fragment() {
                 findNavController().navigate(R.id.nav_login)
             }
             .setNegativeButton(R.string.play_as_guest) { _: DialogInterface, _: Int ->
-                startGame(isMultiplayer)
+                startGame(false)
             }
             .show()
     }
@@ -75,5 +77,34 @@ class HomeFragment : Fragment() {
             .putBoolean("multiplayer", isMultiplayer)
             .apply()
         findNavController().navigate(R.id.action_nav_home_to_nav_categories)
+    }
+
+    private fun showNameInputDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        val inflater = layoutInflater
+        val dialogLayout = inflater.inflate(R.layout.dialog_name_input, null)
+        val editTextPlayer1 = dialogLayout.findViewById<EditText>(R.id.editTextNamePlayer1)
+        val editTextPlayer2 = dialogLayout.findViewById<EditText>(R.id.editTextNamePlayer2)
+
+        builder.setView(dialogLayout)
+        builder.setTitle(R.string.enter_names)
+        builder.setPositiveButton(R.string.start_game) { _: DialogInterface, _: Int ->
+            val playerName1 = editTextPlayer1.text.toString()
+            val playerName2 = editTextPlayer2.text.toString()
+            if (playerName1.isNotEmpty() && playerName2.isNotEmpty()) {
+                QuiziosityApp.getSharedPreferences()
+                    .edit()
+                    .putString("player_name_1", playerName1)
+                    .putString("player_name_2", playerName2)
+                    .apply()
+                startGame(isMultiplayer = true)
+            } else {
+                Toast.makeText(requireContext(), R.string.names_required, Toast.LENGTH_SHORT).show()
+            }
+        }
+        builder.setNegativeButton(R.string.go_back) { dialog: DialogInterface, _: Int ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 }
