@@ -17,7 +17,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import es.uma.quiziosity.QuiziosityApp.Companion.getSharedPreferences
+import es.uma.quiziosity.data.entity.User
 import es.uma.quiziosity.databinding.ActivityMainBinding
+import es.uma.quiziosity.utils.UserUtils
 
 class MainActivity : BaseActivity() {
 
@@ -93,14 +95,6 @@ class MainActivity : BaseActivity() {
     }
 }
 
-// Check if user is logged in
-private fun isUserLoggedIn(): Boolean {
-    val sharedPreferences = getSharedPreferences()
-    val userId = sharedPreferences.getString("user_id", null)
-    val username = sharedPreferences.getString("username", null)
-    return userId != null && username != null
-}
-
 
 // Update the navigation menu (including username in header)
 private fun updateNavigationMenu(binding: ActivityMainBinding) {
@@ -111,8 +105,8 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
 
     // Update the username and best score in the header
     val sharedPreferences = getSharedPreferences()
-    val username = sharedPreferences.getString("username", null)
-    val bestScore = sharedPreferences.getString("best_score", "0")
+    val username = UserUtils.getUsername()
+    val bestScore = UserUtils.getBestScore()
     val headerView = navigationView.getHeaderView(0)
     val usernameTextView: TextView = headerView.findViewById(R.id.nav_header_username_textview)
     val bestScoreTextView: TextView = headerView.findViewById(R.id.nav_header_best_score_textview)
@@ -127,7 +121,7 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
     }
 
     // Handle visibility of login/logout items
-    if (isUserLoggedIn()) {
+    if (UserUtils.isUserLoggedIn()) {
         loginItem.isVisible = false
         logoutItem.isVisible = true
     } else {

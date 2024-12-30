@@ -18,6 +18,7 @@ import androidx.lifecycle.lifecycleScope
 import es.uma.quiziosity.data.model.Question
 import es.uma.quiziosity.data.repository.TriviaRepository
 import es.uma.quiziosity.databinding.ActivityGameBinding
+import es.uma.quiziosity.utils.UserUtils
 import kotlinx.coroutines.launch
 
 class GameActivity : BaseActivity() {
@@ -358,10 +359,12 @@ class GameActivity : BaseActivity() {
         binding.timerText.visibility = View.GONE
         binding.timerProgressBar.visibility = View.GONE
 
-        QuiziosityApp.getSharedPreferences().getString("username", null)?.let { username ->
-            lifecycleScope.launch {
-                QuiziosityApp.getDatabase().userDao().updateScore(username, score)
-                QuiziosityApp.getSharedPreferences().edit().putString("best_score", score.toString()).apply()
+        if(score > (UserUtils.getBestScore()?.toInt() ?: 0)) {
+            UserUtils.getUsername()?.let { username ->
+                lifecycleScope.launch {
+                    QuiziosityApp.getDatabase().userDao().updateScore(username, score)
+                    QuiziosityApp.getSharedPreferences().edit().putString("best_score", score.toString()).apply()
+                }
             }
         }
         showEndGameDialog()
