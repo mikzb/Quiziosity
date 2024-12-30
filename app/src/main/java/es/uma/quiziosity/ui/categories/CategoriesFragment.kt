@@ -1,3 +1,4 @@
+// CategoriesFragment.kt
 package es.uma.quiziosity.ui.categories
 
 import android.app.AlertDialog
@@ -11,8 +12,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import es.uma.quiziosity.GameActivity
+import es.uma.quiziosity.MultiPlayerActivity
 import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.R
+import es.uma.quiziosity.SinglePlayerActivity
 import es.uma.quiziosity.databinding.FragmentCategoriesBinding
 
 class CategoriesFragment : Fragment() {
@@ -85,8 +88,7 @@ class CategoriesFragment : Fragment() {
                 .setMessage(getString(R.string.NoCategorySelectedDialog))
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     // Start the GameActivity
-                    val intent = Intent(requireContext(), GameActivity::class.java)
-                    startActivity(intent)
+                    startGameActivity()
                 }
                 .setNegativeButton(getString(R.string.go_back)) { dialog, _ ->
                     dialog.dismiss()
@@ -97,10 +99,18 @@ class CategoriesFragment : Fragment() {
             val sharedPreferences = QuiziosityApp.getSharedPreferences()
             sharedPreferences.edit().putStringSet("categories", selectedCategories.toSet()).apply()
 
-            // Start the GameActivity
-            val intent = Intent(requireContext(), GameActivity::class.java)
-            startActivity(intent)
+            startGameActivity()
         }
+    }
+
+    private fun startGameActivity() {
+        val sharedPreferences = QuiziosityApp.getSharedPreferences()
+        val intent = if (sharedPreferences.getBoolean("multiplayer", false)) {
+            Intent(requireContext(), MultiPlayerActivity::class.java)
+        } else {
+            Intent(requireContext(), SinglePlayerActivity::class.java)
+        }
+        startActivity(intent)
     }
 
     override fun onDestroyView() {

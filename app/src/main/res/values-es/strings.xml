@@ -58,5 +58,6 @@
     <string name="time_remaining">Tiempo restante: %1$s</string>
     <string name="your_score">Tu puntuación: %1$s</string>
     <string name="game_over">Fin del juego</string>
+    <string name="multiplayer_scores">Puntuación Jugador 1 : %1$s\n\nPuntuación Jugador 2: %2$s</string>
 
 </resources>
