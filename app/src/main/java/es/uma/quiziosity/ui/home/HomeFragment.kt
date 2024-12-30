@@ -1,5 +1,7 @@
 package es.uma.quiziosity.ui.home
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,13 +30,11 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.imageButtonSolo.setOnClickListener {
-            QuiziosityApp.getSharedPreferences().edit().putBoolean("multiplayer", false).apply()
-            findNavController().navigate(R.id.action_nav_home_to_nav_categories)
+            checkLoginStatusAndProceed(isMultiplayer = false)
         }
 
         binding.imageButtonMulti.setOnClickListener {
-            QuiziosityApp.getSharedPreferences().edit().putBoolean("multiplayer", true).apply()
-            findNavController().navigate(R.id.action_nav_home_to_nav_categories)
+            checkLoginStatusAndProceed(isMultiplayer = true)
         }
 
         return root
@@ -43,5 +43,37 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun checkLoginStatusAndProceed(isMultiplayer: Boolean) {
+        val isLoggedIn = QuiziosityApp.getSharedPreferences()
+            .getBoolean("isLoggedIn", false) // Replace "isLoggedIn" with your actual preference key
+
+        if (isLoggedIn) {
+            startGame(isMultiplayer)
+        } else {
+            showLoginConfirmationDialog(isMultiplayer)
+        }
+    }
+
+    private fun showLoginConfirmationDialog(isMultiplayer: Boolean) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.user_not_logged_in_title)  //TODO: translate strings
+            .setMessage(R.string.user_not_logged_in_message)
+            .setPositiveButton(R.string.goto_login) { _: DialogInterface, _: Int ->
+                findNavController().navigate(R.id.nav_login)
+            }
+            .setNegativeButton(R.string.play_as_guest) { _: DialogInterface, _: Int ->
+                startGame(isMultiplayer)
+            }
+            .show()
+    }
+
+    private fun startGame(isMultiplayer: Boolean) {
+        QuiziosityApp.getSharedPreferences()
+            .edit()
+            .putBoolean("multiplayer", isMultiplayer)
+            .apply()
+        findNavController().navigate(R.id.action_nav_home_to_nav_categories)
     }
 }
