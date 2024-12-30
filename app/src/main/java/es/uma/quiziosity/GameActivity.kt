@@ -111,6 +111,12 @@ class GameActivity : BaseActivity() {
         binding.answer3.text = answers[2]
         binding.answer4.text = answers[3]
 
+        animateViewAppearance(binding.questionText)
+        animateViewAppearance(binding.answer1)
+        animateViewAppearance(binding.answer2)
+        animateViewAppearance(binding.answer3)
+        animateViewAppearance(binding.answer4)
+
         resetProgressBar()
         startTimer()
     }
@@ -365,4 +371,13 @@ class GameActivity : BaseActivity() {
         val volume = sharedPreferences.getInt("volume", 50)
         return volume / 100f // Convert volume to a float between 0.0 and 1.0
     }
+}
+
+private fun animateViewAppearance(view: View) {
+    view.alpha = 0f
+    view.visibility = View.VISIBLE
+    view.animate()
+        .alpha(1f)
+        .setDuration(500)
+        .setListener(null)
 }
