@@ -58,7 +58,7 @@
     <string name="time_remaining">Tiempo restante: %1$s</string>
     <string name="your_score">Tu puntuación: %1$s</string>
     <string name="game_over">Fin del juego</string>
-    <string name="enter_name_player2_hint">Introduzca el nombre del jugador 2</string>
+    <string name="enter_name_player2_hint">Nombre del jugador 2</string>
     <string name="multiplayer_scores">%1$s: %2$s puntos\n\n%3$s: %4$s puntos</string>
     <string name="user_not_logged_in_title">Sesión no iniciada</string>
     <string name="user_not_logged_in_message">No has iniciado sesión. Podrás jugar en modo de invitado, pero tu puntuación no se guardará.</string>
@@ -67,6 +67,6 @@
     <string name="start_game">Jugar</string>
     <string name="enter_names">Introduzca los nombres</string>
     <string name="names_required">Ambos nombres son necesarios</string>
-    <string name="enter_name_player1_hint">Introduzca el nombre del jugador 1</string>
+    <string name="enter_name_player1_hint">Nombre del jugador 1</string>
 
 </resources>
