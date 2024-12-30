@@ -47,7 +47,10 @@ class SettingsActivity : BaseActivity() {
                     showConfirmationDialog(
                         title = getString(R.string.reset_score),
                         message = getString(R.string.reset_score_confirmation),
-                        onConfirm = { lifecycleScope.launch { resetScore() } }
+                        onConfirm = {
+                            lifecycleScope.launch { resetScore() }
+                            UserUtils.resetScore()
+                        }
                     )
                     return true
                 }
@@ -57,7 +60,7 @@ class SettingsActivity : BaseActivity() {
                         message = getString(R.string.delete_account_confirmation),
                         onConfirm = {
                             lifecycleScope.launch { deleteAccount() }
-                            QuiziosityApp.getSharedPreferences().edit().clear().apply()
+                            UserUtils.logout()
                             val intent = Intent(requireContext(), MainActivity::class.java)
                             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                             startActivity(intent)

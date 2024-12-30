@@ -13,4 +13,10 @@ object UserUtils {
     fun getBestScore(): String? {
         return QuiziosityApp.getSharedPreferences().getString("best_score", "0")
     }
+    fun logout() {
+        QuiziosityApp.getSharedPreferences().edit().clear().apply()
+    }
+    fun resetScore() {
+        QuiziosityApp.getSharedPreferences().edit().putString("best_score", "0").apply()
+    }
 }

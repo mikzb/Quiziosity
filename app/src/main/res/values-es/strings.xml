@@ -68,5 +68,7 @@
     <string name="enter_names">Introduzca los nombres</string>
     <string name="names_required">Ambos nombres son necesarios</string>
     <string name="enter_name_player1_hint">Introduzca el nombre del jugador 1</string>
+    <string name="delete_account_confirmation">¿Estás seguro de que quieres borrar tu cuenta? Esta acción es irreversible</string>
+    <string name="reset_score_confirmation">¿Estás seguro de que quieres reiniciar tu puntuación máxima? Esta acción es irreversible</string>
 
 </resources>

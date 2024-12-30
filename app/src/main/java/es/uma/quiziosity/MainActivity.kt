@@ -16,8 +16,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
-import es.uma.quiziosity.QuiziosityApp.Companion.getSharedPreferences
-import es.uma.quiziosity.data.entity.User
 import es.uma.quiziosity.databinding.ActivityMainBinding
 import es.uma.quiziosity.utils.UserUtils
 
@@ -27,7 +25,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val preferenceChangeListener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
-        if (key == "user_id" || key == "username") {
+        if (key == "user_id" || key == "username" || key == "best_score") {
             updateNavigationMenu(binding)
         }
     }
@@ -48,7 +46,7 @@ class MainActivity : BaseActivity() {
         }
 
 
-        sharedPreferences = getSharedPreferences()
+        sharedPreferences = QuiziosityApp.getSharedPreferences()
         sharedPreferences.registerOnSharedPreferenceChangeListener(preferenceChangeListener)
 
         updateNavigationMenu(binding)
@@ -67,7 +65,9 @@ class MainActivity : BaseActivity() {
         navView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_logout -> {
-                    logout()
+                    UserUtils.logout()
+                    updateNavigationMenu(binding)
+                    Snackbar.make(binding.root, R.string.message_logout, Snackbar.LENGTH_SHORT).show()
                     true
                 }
                 else -> {
@@ -78,15 +78,6 @@ class MainActivity : BaseActivity() {
                 }
             }
         }
-    }
-
-    private fun logout() {
-        val editor = sharedPreferences.edit()
-        editor.remove("user_id")
-        editor.remove("username")
-        editor.apply()
-
-        Snackbar.make(binding.root, R.string.message_logout, Snackbar.LENGTH_SHORT).show()
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -104,7 +95,6 @@ private fun updateNavigationMenu(binding: ActivityMainBinding) {
     val logoutItem = menu.findItem(R.id.nav_logout)
 
     // Update the username and best score in the header
-    val sharedPreferences = getSharedPreferences()
     val username = UserUtils.getUsername()
     val bestScore = UserUtils.getBestScore()
     val headerView = navigationView.getHeaderView(0)
