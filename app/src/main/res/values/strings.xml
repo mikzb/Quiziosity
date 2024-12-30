@@ -1,0 +1,84 @@
+<resources>
+    <string name="app_name" translatable="false">Quiziosity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow" translatable="false">Slideshow</string>
+    <!-- Strings related to login -->
+    <string name="prompt_email">Username</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_logout">Logout</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="action_register">Register</string>
+    <string name="welcome">"Welcome!"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+    <string name="label_solo" translatable="false">Solo</string>
+    <string name="label_1v1" translatable="false">1v1</string>
+    <string name="menu_leaderboard">Leaderboard</string>
+    <string name="profile_image">Profile image</string>
+    <string name="score">Score</string>
+    <string name="menu_categories">Categories</string>
+    <string name="title_activity_settings">Settings</string>
+
+
+    <string name="sound_settings">Sound Settings</string>
+    <string name="enable_sound_effects">Enable Sound Effects</string>
+    <string name="volume">Volume</string>
+    <string name="theme_settings">Theme Settings</string>
+    <string name="enable_dark_mode">Enable Dark Mode</string>
+    <string name="language_settings">Language Settings</string>
+    <string name="language">Language</string>
+    <string name="account_settings">Account Settings</string>
+    <string name="reset_score">Reset Score</string>
+    <string name="reset_score_summary">Reset your quiz score in the leaderboard</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_summary">Delete your account and all data</string>
+
+    <string name="category_arts_literature">Arts &amp; Literature</string>
+    <string name="category_film_tv">Film &amp; TV</string>
+    <string name="category_food_drink">Food &amp; Drink</string>
+    <string name="category_general_knowledge">General Knowledge</string>
+    <string name="category_geography">Geography</string>
+    <string name="category_history">History</string>
+    <string name="category_music">Music</string>
+    <string name="category_science">Science</string>
+    <string name="category_society_culture">Society &amp; Culture</string>
+    <string name="category_sport_leisure">Sport &amp; Leisure</string>
+    <string name="category_any">Any</string>
+    <string name="show_selected">Show Selected</string>
+    <string name="category_check_uncheck_all">Check/Uncheck All</string>
+    <string name="guest">Guest</string>
+    <string name="message_logout">Logged out successfully</string>
+    <string name="title_activity_game" translatable="false">Trivia</string>
+    <string name="best_score">Best Score: %1$s</string>
+    <string name="start_quiz">Start Quiz</string>
+    <string name="no_category_selected">No Category Selected</string>
+    <string name="NoCategorySelectedDialog">By not selecting a category, the questions will be a mix of every one of them. Do you want to proceed?</string>
+    <string name="proceed">Proceed</string>
+    <string name="go_back">Go Back</string>
+    <string name="time_remaining">Time remaining: %1$s</string>
+    <string name="your_score">Your score: %1$s</string>
+    <string name="game_over">Game Over</string>
+    <string name="user_not_logged_in_title">You are not logged in</string>
+    <string name="user_not_logged_in_message">You are not logged in. You can still play as a guest, your score won\'t be displayed on the leaderboard.</string>
+    <string name="goto_login">LOGIN</string>
+    <string name="play_as_guest">PLAY AS GUEST</string>
+    <string name="start_game">Start Game</string>
+    <string name="enter_names">Enter Names</string>
+    <string name="names_required">Both names are required</string>
+    <string name="enter_name_player1_hint">Enter Player 1 name</string>
+    <string name="enter_name_player2_hint">Enter Player 2 name</string>
+    <string name="multiplayer_scores">%1$s Score: %2$s\n\n%3$s Score: %4$s</string>
+    <string name="delete_account_confirmation">Are you sure you want to delete your account? This action is irreversible</string>
+    <string name="reset_score_confirmation">Are you sure you want to reset your score to 0? This action is irreversible</string>
+
+</resources>
