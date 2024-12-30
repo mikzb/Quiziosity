@@ -73,6 +73,10 @@ dependencies {
     // https://mvnrepository.com/artifact/androidx.constraintlayout/constraintlayout
     runtimeOnly(libs.androidx.constraintlayout.v220)
 
+    // https://mvnrepository.com/artifact/com.squareup.okhttp3/logging-interceptor
+    implementation(libs.logging.interceptor)
+
+
 
 
 

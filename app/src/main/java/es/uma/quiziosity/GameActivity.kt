@@ -87,9 +87,9 @@ open class GameActivity : BaseActivity() {
         resetButtons()
 
         lifecycleScope.launch {
-            val categories = sharedPreferences.getStringSet("categories", setOf())!!
+            val categories = QuiziosityApp.getSharedPreferences().getStringSet("categories", setOf("any"))?.joinToString(",") ?: "any"
             val language = sharedPreferences.getString("language", "en")!!
-            questions = TriviaRepository.getTriviaQuestions(categories.toString(), language)
+            questions = TriviaRepository.getTriviaQuestions(categories, language)
             if (questions.isNotEmpty()) {
                 currentQuestion = questions[0]
                 displayQuestion(currentQuestion)

@@ -11,6 +11,6 @@ interface TriviaApi {
     // Define a method to get trivia questions
     @GET("questions")
     suspend fun getTriviaQuestions(
-        @Query("CategoriesQueryParam") category : String,
+        @Query("categories") category : String,
     ): List<Question>
 }

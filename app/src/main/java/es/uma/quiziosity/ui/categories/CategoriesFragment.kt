@@ -80,6 +80,9 @@ class CategoriesFragment : Fragment() {
         val selectedCategories = (0 until binding.categoriesListView.count)
             .filter { binding.categoriesListView.isItemChecked(it) }
             .map { adapter.getItem(it) }
+            .mapNotNull { categoryName ->
+                viewModel.categories.value?.entries?.find { getString(it.key) == categoryName }?.value
+            }
 
         if (selectedCategories.isEmpty()) {
             // Show a dialog if no category is selected
