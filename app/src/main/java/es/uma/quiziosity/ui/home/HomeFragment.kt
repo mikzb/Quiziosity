@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.R
 import es.uma.quiziosity.databinding.FragmentHomeBinding
+import es.uma.quiziosity.utils.UserUtils
 
 class HomeFragment : Fragment() {
 
@@ -46,8 +47,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun checkLoginStatusAndProceed(isMultiplayer: Boolean) {
-        val isLoggedIn = QuiziosityApp.getSharedPreferences()
-            .getBoolean("isLoggedIn", false) // Replace "isLoggedIn" with your actual preference key
+        val isLoggedIn = UserUtils.isUserLoggedIn()
 
         if (isLoggedIn) {
             startGame(isMultiplayer)
@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
 
     private fun showLoginConfirmationDialog(isMultiplayer: Boolean) {
         AlertDialog.Builder(requireContext())
-            .setTitle(R.string.user_not_logged_in_title)  //TODO: translate strings
+            .setTitle(R.string.user_not_logged_in_title)
             .setMessage(R.string.user_not_logged_in_message)
             .setPositiveButton(R.string.goto_login) { _: DialogInterface, _: Int ->
                 findNavController().navigate(R.id.nav_login)
