@@ -1,8 +1,7 @@
-// HomeFragment.kt
 package es.uma.quiziosity.ui.home
 
 import android.app.AlertDialog
-import android.content.Intent
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -32,41 +31,49 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
         binding.imageButtonSolo.setOnClickListener {
-            if (!UserUtils.isUserLoggedIn()) {
-                showLoginDialog()
-            } else {
-                QuiziosityApp.getSharedPreferences().edit().putBoolean("multiplayer", false).apply()
-                findNavController().navigate(R.id.action_nav_home_to_nav_categories)
-            }
+            checkLoginStatusAndProceed(isMultiplayer = false)
         }
 
         binding.imageButtonMulti.setOnClickListener {
-            QuiziosityApp.getSharedPreferences().edit().putBoolean("multiplayer", true).apply()
-            findNavController().navigate(R.id.action_nav_home_to_nav_categories)
+            checkLoginStatusAndProceed(isMultiplayer = true)
         }
 
         return root
     }
 
-    private fun showLoginDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setTitle("Not Logged In")
-        builder.setMessage("Since you are not logged in, the score won't be saved. Do you want to continue?")
-        builder.setPositiveButton("Continue") { dialog, _ ->
-            dialog.dismiss()
-            QuiziosityApp.getSharedPreferences().edit().putBoolean("multiplayer", false).apply()
-            findNavController().navigate(R.id.action_nav_home_to_nav_categories)
-        }
-        builder.setNegativeButton("Log In") { dialog, _ ->
-            dialog.dismiss()
-            findNavController().navigate(R.id.action_nav_home_to_nav_login)
-        }
-        builder.setCancelable(false)
-        builder.show()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun checkLoginStatusAndProceed(isMultiplayer: Boolean) {
+        val isLoggedIn = UserUtils.isUserLoggedIn()
+
+        if (isLoggedIn) {
+            startGame(isMultiplayer)
+        } else {
+            showLoginConfirmationDialog(isMultiplayer)
+        }
+    }
+
+    private fun showLoginConfirmationDialog(isMultiplayer: Boolean) {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.user_not_logged_in_title)
+            .setMessage(R.string.user_not_logged_in_message)
+            .setPositiveButton(R.string.goto_login) { _: DialogInterface, _: Int ->
+                findNavController().navigate(R.id.nav_login)
+            }
+            .setNegativeButton(R.string.play_as_guest) { _: DialogInterface, _: Int ->
+                startGame(isMultiplayer)
+            }
+            .show()
+    }
+
+    private fun startGame(isMultiplayer: Boolean) {
+        QuiziosityApp.getSharedPreferences()
+            .edit()
+            .putBoolean("multiplayer", isMultiplayer)
+            .apply()
+        findNavController().navigate(R.id.action_nav_home_to_nav_categories)
     }
 }
