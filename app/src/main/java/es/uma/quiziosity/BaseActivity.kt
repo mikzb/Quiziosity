@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.PreferenceManager
+import com.google.android.material.snackbar.Snackbar
 import es.uma.quiziosity.utils.LocaleHelper
 
 open class BaseActivity : AppCompatActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
@@ -57,7 +58,5 @@ open class BaseActivity : AppCompatActivity(), SharedPreferences.OnSharedPrefere
         } else {
             audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0)
         }
-
-
     }
 }

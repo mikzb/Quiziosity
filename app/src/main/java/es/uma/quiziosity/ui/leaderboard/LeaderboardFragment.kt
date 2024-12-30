@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import es.uma.quiziosity.QuiziosityApp
 import es.uma.quiziosity.R
+import es.uma.quiziosity.data.repository.UserRepository
 import kotlinx.coroutines.launch
 
 /**
@@ -65,7 +66,7 @@ class LeaderboardFragment : Fragment() {
     private fun loadMoreItems() {
         isLoading = true
         lifecycleScope.launch {
-            val users = QuiziosityApp.getDatabase().userDao().getUsersByScorePaged(currentPage * pageSize, pageSize)
+            val users = QuiziosityApp.getUserRepository().getUsersByScorePaged(currentPage * pageSize, pageSize)
             adapter.addItems(users)
             currentPage++
             isLoading = false

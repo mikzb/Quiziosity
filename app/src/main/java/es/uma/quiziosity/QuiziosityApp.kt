@@ -7,6 +7,7 @@ import es.uma.quiziosity.data.db.AppDatabase
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import es.uma.quiziosity.data.repository.UserRepository
 
 class QuiziosityApp : Application() {
     // Define the database property at the class level
@@ -49,6 +50,10 @@ class QuiziosityApp : Application() {
 
         fun getSharedPreferences(): SharedPreferences {
             return instance.sharedPreferences
+        }
+
+        fun getUserRepository(): UserRepository {
+            return UserRepository(getDatabase().userDao())
         }
 
         // Access the database globally

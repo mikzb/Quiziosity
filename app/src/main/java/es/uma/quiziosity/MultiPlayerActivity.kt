@@ -9,8 +9,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.lifecycleScope
-import kotlinx.coroutines.launch
 
 class MultiPlayerActivity : GameActivity() {
 
@@ -96,13 +94,7 @@ class MultiPlayerActivity : GameActivity() {
     }
 
     override fun endGame() {
-        binding.answer1.visibility = View.GONE
-        binding.answer2.visibility = View.GONE
-        binding.answer3.visibility = View.GONE
-        binding.answer4.visibility = View.GONE
-        binding.timerText.visibility = View.GONE
-        binding.timerProgressBar.visibility = View.GONE
-
+        super.endGame()
         showEndGameDialog()
     }
 

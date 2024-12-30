@@ -78,5 +78,7 @@
     <string name="enter_name_player1_hint">Enter Player 1 name</string>
     <string name="enter_name_player2_hint">Enter Player 2 name</string>
     <string name="multiplayer_scores">%1$s Score: %2$s\n\n%3$s Score: %4$s</string>
+    <string name="delete_account_confirmation">Are you sure you want to delete your account? This action is irreversible</string>
+    <string name="reset_score_confirmation">Are you sure you want to reset your score to 0? This action is irreversible</string>
 
 </resources>

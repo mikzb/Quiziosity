@@ -338,31 +338,6 @@ open class GameActivity : BaseActivity() {
         binding.answer4.visibility = View.GONE
         binding.timerText.visibility = View.GONE
         binding.timerProgressBar.visibility = View.GONE
-
-        if(score > (UserUtils.getBestScore()?.toInt() ?: 0)) {
-            UserUtils.getUsername()?.let { username ->
-                lifecycleScope.launch {
-                    QuiziosityApp.getDatabase().userDao().updateScore(username, score)
-                    QuiziosityApp.getSharedPreferences().edit().putString("best_score", score.toString()).apply()
-                }
-            }
-        }
-        showEndGameDialog()
-    }
-
-    private fun showEndGameDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.game_over))
-        builder.setMessage(getString(R.string.your_score, score.toString()))
-        builder.setPositiveButton("OK") { dialog, _ ->
-            dialog.dismiss()
-            val intent = Intent(this, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
-            startActivity(intent)
-            finish()
-        }
-        builder.setCancelable(false)
-        builder.show()
     }
 
     private fun getNormalizedVolume(): Float {

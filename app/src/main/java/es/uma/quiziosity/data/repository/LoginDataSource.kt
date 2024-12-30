@@ -44,7 +44,7 @@ class LoginDataSource {
             val user = es.uma.quiziosity.data.entity.User(0, username, SecurityUtils.hashString(password))
 
             // Insert user into database
-            val userId = userDao.insertUser(user)
+            val userId = QuiziosityApp.getUserRepository().insertUser(user)
 
             // Login success
             Result.Success(LoggedInUser(userId.toString(), username))
