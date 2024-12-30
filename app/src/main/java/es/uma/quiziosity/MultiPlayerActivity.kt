@@ -15,10 +15,18 @@ class MultiPlayerActivity : GameActivity() {
     private var currentPlayer = 1
     private var player1Score = 0
     private var player2Score = 0
+    private lateinit var playerName1: String
+    private lateinit var playerName2: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Any multi-player specific initialization can go here
+        // Retrieve player names from SharedPreferences
+        val sharedPreferences = QuiziosityApp.getSharedPreferences()
+        playerName1 = sharedPreferences.getString("player_name_1", getString(R.string.guest))!!
+        playerName2 = sharedPreferences.getString("player_name_2", getString(R.string.guest))!!
+
+        // Set the initial player name in the current_player TextView
+        binding.currentPlayer.text = playerName1
     }
 
     override fun showNextQuestion() {
@@ -37,6 +45,7 @@ class MultiPlayerActivity : GameActivity() {
 
         // Switch player turn
         currentPlayer = if (currentPlayer == 1) 2 else 1
+        updateCurrentPlayer()
     }
 
     override fun checkAnswer(selectedAnswer: String, correctAnswer: String) {
@@ -64,12 +73,16 @@ class MultiPlayerActivity : GameActivity() {
                     }
 
                     val timeLeft = binding.timerProgressBar.progress
+
                     val scoreIncrement = 10 + (timeLeft / 10)
                     if (currentPlayer == 1) {
                         player1Score += scoreIncrement
                     } else {
                         player2Score += scoreIncrement
                     }
+
+                    updateCurrentPlayer()
+
                     startTimer()
                 }
             } else {
@@ -93,16 +106,22 @@ class MultiPlayerActivity : GameActivity() {
         }, 1500)
     }
 
+    private fun updateCurrentPlayer() {
+        if (currentPlayer == 1) {
+            binding.currentPlayer.text = playerName1
+            player1Score.toString().also { binding.currentScore.text = it }
+        } else {
+            binding.currentPlayer.text = playerName2
+            player2Score.toString().also { binding.currentScore.text = it }
+        }
+    }
+
     override fun endGame() {
         super.endGame()
         showEndGameDialog()
     }
 
     private fun showEndGameDialog() {
-        val sharedPreferences = QuiziosityApp.getSharedPreferences()
-        val playerName1 = sharedPreferences.getString("player_name_1", getString(R.string.guest))
-        val playerName2 = sharedPreferences.getString("player_name_2", getString(R.string.guest))
-
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.game_over))
         builder.setMessage(getString(R.string.multiplayer_scores, playerName1, player1Score.toString(), playerName2, player2Score.toString()))

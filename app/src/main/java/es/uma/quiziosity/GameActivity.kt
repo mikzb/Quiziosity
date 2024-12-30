@@ -84,6 +84,12 @@ open class GameActivity : BaseActivity() {
             setVolume(normalizedVolume, normalizedVolume)
         }
 
+        // Set the username in the current_player TextView
+        val username = UserUtils.getUsername() ?: getString(R.string.guest)
+        binding.currentPlayer.text = username
+
+        binding.currentScore.text = "0"
+
         resetButtons()
 
         lifecycleScope.launch {
@@ -273,6 +279,7 @@ open class GameActivity : BaseActivity() {
                     consecutiveCorrectAnswers++
                     val timeLeft = binding.timerProgressBar.progress
                     score += 10 + (timeLeft / 10)
+                    score.toString().also { binding.currentScore.text = it } // Update the score TextView
                     startTimer(consecutiveCorrectAnswers * 2000L)
                 }
             } else {

@@ -19,6 +19,47 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background_image"
+        app:layout_constraintVertical_bias="0.364"
+        >
+
+        <TextView
+            android:id="@+id/current_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/current_score"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/background_image"
+            app:layout_constraintVertical_bias="0.374"
+            android:layout_marginEnd="30dp"
+            />
+
+        <TextView
+        android:id="@+id/current_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/background_image"
+        app:layout_constraintVertical_bias="0.374"
+        android:layout_marginEnd="30dp"
+        android:textSize="24sp"
+        />
+    </LinearLayout>
+
     <LinearLayout
         android:id="@+id/question_layout"
         android:layout_width="0dp"
